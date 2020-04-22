@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dochub</title>
+</head>
+<body>
+	<div>
+		<h1>Welcome to Dochub!!!!</h1>
+        <img src="static/docchub2.png">
+	</div>
+	<div>
+        <h3>Login as ....</h3>
+        <form action="login" method="post">
+        <input  type="radio" id="doctor" name="usertype" value="doctor"> <label for="doctor"> Doctor </label>
+        <input  type="radio" id="patient" name="usertype" value="patient"> <label for="patient"> Patient </label>
+        <input  type="radio" id="pharmacy" name="usertype" value="pharmacy"> <label for="pharmacy"> Pharmacy  </label>
+        <input  type="radio" id="clinic" name="usertype" value="clinic"> <label for="clinic"> Clinic  </label> <br>
+        <input type="text" id="username" name="username" placeholder="Username"><br>
+        <input type="password" placeholder="Password" ><br>
+        <input type="submit" value="LOGIN">
+        </form>
+	</div>
+</body>
+</html>
