@@ -1,24 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Dochub</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <!--<link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet">-->
 </head>
 <body>
-	<div>
-		<h1>Welcome to Dochub!!!!</h1>
-        <img src="static/docchub2.png">
-	</div>
-	<div>
-        <h3>Login as ....</h3>
-        <form action="login" method="post">
-        <input  type="radio" id="doctor" name="usertype" value="doctor"> <label for="doctor"> Doctor </label>
-        <input  type="radio" id="patient" name="usertype" value="patient"> <label for="patient"> Patient </label>
-        <input  type="radio" id="pharmacy" name="usertype" value="pharmacy"> <label for="pharmacy"> Pharmacy  </label>
-        <input  type="radio" id="clinic" name="usertype" value="clinic"> <label for="clinic"> Clinic  </label> <br>
-        <input type="text" id="username" name="username" placeholder="Username"><br>
-        <input type="password" placeholder="Password" ><br>
-        <input type="submit" value="LOGIN">
-        </form>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                <a class="navbar-brand" href="#">
+                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+                </a>
+                <a class="navbar-brand" href="#">Welcome to DocHub!</a>
+        </nav>
+	<div class="container pt-5">
+                <div class="row justify-content-center">
+                        <h3>Login</h3>
+                </div>
+                <div class="row justify-content-center">
+                        <form action="login" method="post">
+                                <div class="form-check-inline">
+                                        <label class="form-check-label" for="doctor">
+                                          <input type="radio" class="form-check-input" id="doctor" name="usertype" value="doctor">Doctor
+                                        </label>
+                                      </div>
+                                      <div class="form-check-inline">
+                                        <label class="form-check-label" for="patient">
+                                          <input type="radio" class="form-check-input" id="patient" name="usertype" value="patient">Patient
+                                        </label>
+                                      </div>
+                                      <div class="form-check-inline">
+                                        <label class="form-check-label" for="clinic">
+                                          <input type="radio" class="form-check-input" id="clinic" name="usertype" value="clinic">Clinic
+                                        </label>
+                                      </div>
+                                      <div class="form-check-inline">
+                                        <label class="form-check-label" for="pharmacy">
+                                          <input type="radio" class="form-check-input" id="pharmacy" name="usertype" value="pharmacy">Pharmacy`
+                                        </label>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="email">Username:</label>
+                                        <input type="text" class="form-control" placeholder="Enter Username" id="username" name="username">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="pwd">Password:</label>
+                                        <input type="password" class="form-control" placeholder="Enter Password" id="pwd" name="password">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                </div>
 	</div>
 </body>
 </html>
