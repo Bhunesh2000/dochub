@@ -12,7 +12,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        <!--<link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet">-->
+        <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
@@ -55,7 +55,16 @@
                                         <label for="pwd">Password:</label>
                                         <input type="password" class="form-control" placeholder="Enter Password" id="pwd" name="password">
                                       </div>
-                                      <button type="submit" class="btn btn-primary">Submit</button>
+                                      <button type="submit" class="btn btn-primary">Login</button>
+                                      <button type="button" class="btn btn-info">Signup</button>
+                                      <div class="pt-2">
+                                        {% for message in get_flashed_messages() %}
+                                        <div class="alert alert-warning">
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                {{ message }}
+                                        </div>
+                                        {% endfor %}
+                                        </div>
                         </form>
                 </div>
 	</div>
