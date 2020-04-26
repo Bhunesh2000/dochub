@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+</head>
+<body>
+    {%  if usertype =="doctor" %}
+        <form method="post" action="">
+            <input type="text" id="name"  placeholder="Enter your name">
+            <input type="text" id="specialization" placeholder="You are specialized in..">
+            <input type="number" id="contact"  placeholder="Your contact number">
+            <input type="number" id="fee" placeholder="What fee you will charge? ">
+            <button type="submit" >Create Account</button>
+        </form>
+    {% endif %}
+    {% if usertype=="patient" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name">
+            <label for="male">
+                <input type="radio" id="sex" value="male" > Male
+            </label>
+            <label for="female">
+                <input type="radio" id="sex" value="female" > Female
+            </label>
+            <input type="number" id="age" placeholder="Your age here..">
+            <input type="number" id="contact" placeholder="Your contact number">
+            <button type="submit" >Create Account</button>
+        </form>
+    {% endif %}
+    {% if usertype=="clinic" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name">
+            <input type="text" id="address" placeholder="Address">
+            <input type="number" id="contact" placeholder="Your contact number">
+            <h4>Please select your opening days</h4>
+            <input type="checkbox" id="days" name="days" value="Monday">
+            <label for="days" >Monday</label>
+            <input type="checkbox" id="days" name="days" value="Tuesday">
+            <label for="days" >Tuesday</label>
+            <input type="checkbox" id="days" name="days" value="Wednesday">
+            <label for="days" >Wednesday</label>
+            <input type="checkbox" id="days" name="days" value="Thursday">
+            <label for="days" >Thursday</label>
+            <input type="checkbox" id="days" name="days" value="Friday">
+            <label for="days" >Friday</label>
+            <input type="checkbox" id="days" name="days" value="Saturday">
+            <label for="days" >Saturday</label>
+            <input type="checkbox" id="days" name="days" value="Sunday">
+            <label for="days" >Sunday</label>
+            <h4>Enter your Clinic timings</h4>
+            <input type="time" id="openingtime" name="openingtime" placeholder="Opening time">
+            <input type="time" id="closingtime" name="closingtime" placeholder="Closing time">
+            <h5>You can add/remove timings later </h5>
+            <button type="submit" >Create Account</button>
+        </form>
+    {% endif %}
+    {% if usertype=="pharmacy" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name">
+            <input type="text" id="specialization" placeholder="You are specialized in..">
+            <input type="number" id="contact" placeholder="Your contact number">
+            <button type="submit" >Create Account</button>
+        </form>
+    {% endif %}
+</body>
+</html>

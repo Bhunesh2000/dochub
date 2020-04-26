@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>pharmacy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dochub - Pharmacy: {{ username }}</title>
 </head>
 <body>
+    <nav>
+            <a href="#">
+            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+            </a>
+            <a href="#">Welcome {{ name }}!</a>
+            <button type="button">Profile</button>
+    </nav>
 	<div>
-		<h1>Welcome {{ username }}</h1>
+        <h4>Enter Patient's detail to see Prescription</h4>
+        <form method="post" action="">
+            <input type="text" class="form-control" placeholder="Enter Username" id="username" name="username">
+            <button type="submit" class="btn btn-primary">See Prescription</button>
+        </form>
 	</div>
-	<div>
-		<h3>pharmacy</h3>
-	</div>
+    <div>
+        <form method="post" action="">
+                <button type="submit"> Scan QR Code</button>
+        </form>
+    </div>
 </body>
 </html>

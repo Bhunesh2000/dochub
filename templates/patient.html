@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>patient</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dochub - Patient : {{  username }}</title>
 </head>
 <body>
-	<div>
-		<h1>Welcome {{ username }}</h1>
-	</div>
-	<div>
-		<h5>patient</h5>
-		<h5>Your medical history</h5>
+    <nav>
+            <a href="#">
+            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+            </a>
+            <a href="#">Welcome Mr. {{ name }}!</a>
+            <button type="button">Book an Appointment</button>
+            <button type="button">See Medical history</button>
+            <button type="button">Profile</button>
+    </nav>
+    <table>
+        <thead>
+          <tr>
+            <th scope="col">Doctor</th>
+			<th scope="col">Date Time</th>
+			<th scope="col">Clinic</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for doctor, datetime, clinic in appointments %}
+				<tr>
+				<td>{{name}}</td>
+				<td>{{datetime}}</td>
+				<td>{{clinic}}</td>
+				<td>
+					<button type="button">Reschedule</button>
+					<button type="button">Cancel</button>
+				</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		</table>
 	</div>
 </body>
 </html>
