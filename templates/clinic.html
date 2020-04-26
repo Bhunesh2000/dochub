@@ -1,14 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>clinic</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dochub - Clinic: {{ username }}</title>
 </head>
 <body>
+    <nav>
+            <a href="#">
+            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+            </a>
+            <a href="#">Welcome {{ name }}!</a>
+            <form method="post" action="">
+                <button type="button">Manage Clinic timings</button>
+            </form>
+            <form method="post" action="">
+                <button type="button">Manage Doctors</button>
+            </form>
+            <form method="post" action="">
+                <button type="button">Profile</button>
+            </form>
+    </nav>
 	<div>
-		<h1>Welcome {{ username }}</h1>
-	</div>
-	<div>
-		<h5>clinic</h5>
+		<table>
+        <thead>
+          <tr>
+            <th scope="col">Patient Name</th>
+			<th scope="col">Date Time</th>
+			<th scope="col">Doctor</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for name, datetime, doctor in appointments %}
+				<tr>
+				<td>{{name}}</td>
+				<td>{{datetime}}</td>
+				<td>{{doctor}}</td>
+				<td>
+                    <form method="post" action="">
+                        <button type="button">Reschedule</button>
+                    </form>
+					<form method="post" action="">
+                        <button type="button">Cancel</button>
+                    </form>
+				</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		</table>
 	</div>
 </body>
 </html>
