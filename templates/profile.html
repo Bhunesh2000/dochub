@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    {%  if usertype =="doctor" %}
+        <form method="post" action="">
+            <input type="text" id="name"  placeholder="Enter your name" value="{{ name }}">
+            <input type="text" id="specialization" placeholder="You are specialized in.." value="{{ specialization }}">
+            <input type="number" id="contact"  placeholder="Your contact number" value="{{ contact }}">
+            <input type="number" id="fee" placeholder="What fee you will charge? " value="{{ fee }}">
+            <button type="submit" value="update">Update</button>
+            <button type="submit" value="cancel">Cancel</button>
+        </form>
+    {% endif %}
+    {% if usertype=="patient" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name" value="{{ name }}">
+            <label for="male">
+                <input type="radio" id="sex" value="male" {% if sex=='male' %} checked {% endif %} > Male
+            </label>
+            <label for="female">
+                <input type="radio" id="sex" value="female" {% if sex=='female' %} checked {% endif %}> Female
+            </label>
+            <input type="number" id="age" placeholder="Your age here.." value="{{ age }}">
+            <input type="number" id="contact" placeholder="Your contact number" value="{{ contact }}">
+            <button type="submit" value="update">Update</button>
+            <button type="submit" value="cancel">Cancel</button>
+        </form>
+    {% endif %}
+    {% if usertype=="clinic" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name" value="{{ name }}">
+            <input type="text" id="address" placeholder="Address" value="{{ address }}">
+            <input type="number" id="contact" placeholder="Your contact number" value="{{ contact }}">
+            <button type="submit" value="update">Update</button>
+            <button type="submit" value="cancel">Cancel</button>
+        </form>
+    {% endif %}
+    {% if usertype=="pharmacy" %}
+        <form method="post" action="">
+            <input type="text" id="name" placeholder="Enter your name" value="{{ name }}">
+            <input type="number" id="contact" placeholder="Your contact number" value="{{ contact }}">
+            <button type="submit" value="update">Update</button>
+            <button type="submit" value="cancel">Cancel</button>
+        </form>
+    {% endif %}
+</body>
+</html>

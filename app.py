@@ -11,7 +11,6 @@ def home():
 @app.route('/login_signup', methods=['POST'])
 def login_signup():
     loginorsignup=request.form.get('loginorsignup')
-    print(loginorsignup)
     usertype = request.form.get('usertype')
     _username = request.form.get('username')
     if (loginorsignup=='login'):
@@ -31,6 +30,21 @@ def login_signup():
     else:
         flash('Please try again')
         return redirect(url_for('home'))
+
+@app.route('/update_profile',methods=['POST'])
+def update_profile():
+    usertype=request.form.get('profile_type')
+    print(usertype)
+    if usertype == 'patient':
+        return render_template("profile.html",usertype=usertype, name='Rishab',sex='male', age='20', contact=9876543210)
+    elif usertype == 'doctor':
+        return render_template("profile.html",usertype=usertype,name='Shashwat',specialization='heart',contact=9876543210,fee=300)
+    elif usertype == 'pharmacy':
+        return render_template("profile.html", usertype=usertype,name='Apollo pharmacy',contact=9876543210)
+    elif usertype == 'clinic':
+        return render_template("profile.html",usertype=usertype,name='Mars hospital',address='Delhi',contact=9876543210 )
+    return
+
 i = 0
 def get_i():
     global i
