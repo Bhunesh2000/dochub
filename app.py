@@ -31,7 +31,9 @@ def login_signup():
             flash('Wrong Credentials')
             return redirect(url_for('home'))
     elif (loginorsignup=='signup'):
-        return render_template("signup.html",usertype=usertype)
+        _username=request.form.get('username')
+        _password=request.form.get('password')
+        return render_template("signup.html",usertype=usertype,username=_username,password=_password)
         # return redirect(url_for('signup',username=_username, password = _password, usertype=usertype))
     # else:
     #     flash('Please try again')
@@ -42,6 +44,10 @@ def login_signup():
 #     usertype = request.args.get('usertype')
     
 #     return render_template("signup.html",usertype=usertype)
+
+@app.route('/book_appointment',methods=['POST'])
+def book_appointment():
+    return render_template("bookappointment.html",diseases=['malaria',"common cold"],clinics=['apollo','mars hospital'],doctors=['dr. vats','dr.ramesh'],timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
 
 @app.route('/update_profile',methods=['POST'])
 def update_profile():
