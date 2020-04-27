@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Treat {{ name }}</title>
+</head>
+<body>
+    <div>
+        <h3> Past prescriptions </h3>
+		<table>
+        <thead>
+          <tr>
+            <th scope="col">Medicines</th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for medicine in past_pres %}
+				<tr>
+				<td>{{ medicine }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		</table>
+	</div>
+    <form method="post" action="">
+        <label for="new_pres"> Give Prescription </label>
+        <input type="text" id="new_pres" name="new_pres" placeholder="Enter prescription here">
+        <button type="submit"> Add </button>
+    </form>
+    <div>
+        <h3> Medical History </h3>
+		<table>
+        <thead>
+          <tr>
+            <th scope="col">Type of Disease</th>
+            <th scope="col">Disease</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> Allergies </td>
+                <td>
+                    {% for allergy in allergies %}
+                        {{ allergy }},
+                    {% endfor %}
+                </td>
+            </tr>
+			<tr>
+                <td> Diabetes </td>
+                <td>
+                    {% for diabete in diabetes %}
+                        {{ diabete }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Blood Pressure </td>
+                <td>
+                    {% for blood_pressure in bp %}
+                        {{ blood_pressure }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Infectious Diseases </td>
+                <td>
+                    {% for infec in infections %}
+                        {{ infec }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Family history </td>
+                <td>
+                    {% for fmly in fmly_his %}
+                        {{ fmly }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Surgical history </td>
+                <td>
+                    {% for surg in surg_his %}
+                        {{ surg }},
+                    {% endfor %}
+                </td>
+            </tr>
+		</tbody>
+		</table>
+	</div>
+    <form method="post" action="">
+        <label for="new_med_history"> Add Medical history </label>
+        <input type="text" id="new_med_history" name="new_med_history" placeholder="Enter medical history here">
+        <label for="allergies"></label> Allergy
+        <input type="radio" id="allergies" name="type_disease" value="allergies">
+        <label for="diabetes"> Diabetes </label>
+        <input type="radio" id="diabetes" name="type_disease" value="diabetes">
+        <label for="bp"> Blood Pressure </label>
+        <input type="radio" id="bp" name="type_disease" value="bp">
+        <label for="infec"> Infectious disease </label>
+        <input type="radio" id="infec" name="type_disease" value="infec">
+        <label for="fmly_his"> Family history </label>
+        <input type="radio" id="fmly_his" name="type_disease" value="fmly_his">
+        <label for="sur_his"> Surgical history </label>
+        <input type="radio" id="sur_his" name="type_disease" value="sur_his">
+        <button type="submit"> Add </button>
+    </form>
+    <div>
+        <h3> Past Reports </h3>
+        <table>
+        <thead>
+          <tr>
+            <th scope="col"> Symptoms </th>
+			<th scope="col"> Disease </th>
+			<th scope="col">Test required </th>
+            <th scope="col"> Test reports </th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for symptoms,disease,test_req,test_rep in past_reports %}
+				<tr>
+				<td>{{ symptoms }}</td>
+				<td>{{ disease }}</td>
+				<td>{{ test_req }}</td>
+                <td>{{ test_rep }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+		</table>
+	</div>
+    <h3> Add New Report </h3>
+    <form method="post" action="">
+        <label for="symptoms"> Symptoms </label>
+        <input type="text" id="symptoms" name="symptoms" placeholder="What are the symptoms?">
+        <label for="disease"> Disease </label>
+        <input type="text" id="disease" name="disease" placeholder="What is the disease patient is suffering from?">
+        <label for="test_req"> Tests required </label>
+        <input type="text" id="test_req" name="test_req" placeholder="What are test required?">
+        <label for="test_rep"> Test reports </label>
+        <input type="text" id="test_rep" name="test_rep" placeholder="Test report says...">
+        <button type="submit"> Add </button>
+    </form>
+</body>
+</body>
+</html>

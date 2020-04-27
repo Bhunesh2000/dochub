@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dochub - Book an appointment </title>
+</head>
+<body>
+    <nav>
+                <a href="#">
+                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+                </a>
+    </nav>
+    <label for="disease"> What are you suffering from ? </label>
+    <select id="disease">
+        {% for disease in diseases %}
+        <option value="{{ disease }}"> disease </option>
+        {% endfor %}
+    </select>
+    <label for="clinic"> Choose a clinic </label>
+    <select id="clinic">
+        {% for clinic in clinics %}
+        <option value="{{ clinic }}"> {{clinic}} </option>
+        {% endfor %}
+    </select>
+    <label for="doctor"> Select the doctor you want to book appointment with </label>
+    <select id="doctor">
+        {% for doctor in doctors %}
+        <option value="{{ doctor }}"> {{doctor}} </option>
+        {% endfor %}
+    </select>
+    <label for="timing"> Select time convenient to you </label>
+    <select id="timing">
+        {% for timing in timings %}
+        <option value="{{ timing }}"> {{ timing }} </option>
+        {% endfor %}
+    </select>
+</body>
+</html>

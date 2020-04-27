@@ -12,13 +12,13 @@
             </a>
             <a href="#">Welcome {{ name }}!</a>
             <form method="post" action="">
-                <button type="button">Manage Clinic timings</button>
+                <button type="submit">Manage Clinic timings</button>
             </form>
             <form method="post" action="clinic_doctors">
                 <button type="button" name = "c_id" value="{{c_id}}">Manage Doctors</button>
             </form>
-            <form method="post" action="update_profile">
-                <button type="button" name="profile_type" value="clinic">Profile</button>
+            <form action="update_profile" method="post" >
+                <button type="submit" name="profile_type" value="clinic">Profile</button>
             </form>
     </nav>
 	<div>
@@ -40,7 +40,7 @@
 				<td>{{description}}</td>
 				<td>
                     <form method="post" action="">
-                        <button type="button">Reschedule</button>
+                        <button type="submit">Reschedule</button>
                     </form>
 					<form method="post" action="clinic_cancel_appointment">
                         <button type="button" name="a_id" value="{{a_id}}}">Cancel</button>
