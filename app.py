@@ -95,6 +95,31 @@ def new_clinic():
         db.add_clinic_timing(c_id, day, openingtime, closingtime)
     return login_clinic(c_id, name)
 
+@app.route('/treat_patient', methods=['POST'])
+def treat_patient():
+    a_id = request.form.get('a_id')
+    return a_id
+
+@app.route('/doc_cancel_appointment', methods=['POST'])
+def doc_cancel_appointment():
+    a_id = request.form.get('a_id')
+    d_id, d_name = db.get_appointment_doc(a_id)
+    db.delete_appointment(a_id)
+    return login_doctor(d_id, d_name)
+
+@app.route('/clinic_cancel_appointment', methods=['POST'])
+def clinic_cancel_appointment():
+    a_id = request.form.get('a_id')
+    c_id, c_name = db.get_appointment_clinic(a_id)
+    db.delete_appointment(a_id)
+    return login_clinic(c_id, c_name)
+
+@app.route('/clinic_doctors', methods=['POST'])
+def clinic_doctors():
+    c_id = request.form.get('c_id')
+    doctors = db.view_clinic_docs(c_id)
+    return doctors
+
 
 def login_doctor(d_id, d_name):
     appointments = db.view_doc_upcoming_appointments(d_id)
@@ -110,7 +135,8 @@ def login_pharmacy(pharma_id, pharma_name):
     return render_template("pharmacy.html",name=pharma_name)
 
 def login_clinic(c_id, c_name):
-    return render_template("clinic.html",name=c_name)
+    appointments = db.view_clinic_upcoming_appointments(c_id)
+    return render_template("clinic.html",name=c_name, c_id = c_id, appintments=appointments)
 
 @app.route('/fetch_prescriptions', methods=['POST'])
 def fetch_prescriptions():

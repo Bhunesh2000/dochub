@@ -47,14 +47,14 @@
 				<td>{{c_name}}</td>
 				<td>{{description}}</td>
 				<td>
-                    <form method="post" action="">
-                        <button type="submit" class="btn btn-sm btn-success">Treat</button>
+                    <form method="post" action="treat_patient">
+                        <button type="submit" name='a_id' value="{{a_id}}" class="btn btn-sm btn-success">Treat</button>
                     </form>
-					<form method="post" action="">
-                        <button type="submit" class="btn btn-sm btn-primary">Reschedule</button>
+					<form method="post" action="reschedule_appointment">
+                        <button type="submit" name='a_id' value="{{a_id}}" class="btn btn-sm btn-primary">Reschedule</button>
                     </form>
-					<form method="post" action="">
-                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+					<form method="post" action="doc_cancel_appointment">
+                        <button type="submit" name='a_id' value="{{a_id}}"class="btn btn-sm btn-danger">Cancel</button>
                     </form>
 				</td>
 				</tr>

@@ -143,6 +143,23 @@ def new_pharmacy(name, phone, username, password):
     mydb.commit()
     return pharma_id
 
+def view_clinic_upcoming_appointments(c_id):
+    global mydb, mydbcursor
+    query = f"select a_id, p_id, p_name, d_id, d_name, schedule, description from appointments natural join doctors natural join patients where c_id = {c_id} and schedule >= now()"
+    mydbcursor.execute(query)
+    appointments = map(lambda x: x[:-2] + (x[-2].strftime("%d-%b-%Y %I:%M"),x[-1]) , mydbcursor.fetchall())
+    appointments = list(appointments)
+    return appointments
+
+def view_clinic_past_appointments(c_id):
+    global mydb, mydbcursor
+    query = f"select a_id, p_id, p_name, d_id, d_name, schedule, description from appointments natural join doctors natural join patients where c_id = {c_id} and schedule < now()"
+    mydbcursor.execute(query)
+    appointments = map(lambda x: x[:-2] + (x[-2].strftime("%d-%b-%Y %I:%M"),x[-1]) , mydbcursor.fetchall())
+    appointments = list(appointments)
+    return appointments
+
+
 def view_doc_upcoming_appointments(d_id, c_id = 0):
     global mydb, mydbcursor
     if(c_id):
@@ -168,6 +185,13 @@ def view_doc_past_appointments(d_id, c_id = 0):
 def view_docs():
     global mydb, mydbcursor
     query = f"select * from doctors"
+    mydbcursor.execute(query)
+    doctors = list(mydbcursor.fetchall())
+    return doctors
+
+def view_clinic_docs(c_id):
+    global mydb, mydbcursor
+    query = f"select * from doctors natural join clinic_doctors where c_id={c_id}"
     mydbcursor.execute(query)
     doctors = list(mydbcursor.fetchall())
     return doctors
@@ -311,6 +335,18 @@ def get_prescriptions(p_username):
     # lect description from (SELECT a_id, description from appointments natural join login_patients where username = 'shashwat90') t where a_id = (SELECT MAX(a_id) FROM appointments natural join login_patients where username = '{p_username}')
     mydbcursor.execute(query)
     return list(mydbcursor.fetchall())
+
+def get_appointment_doc(a_id):
+    global mydb, mydbcursor
+    query = f"select d_id, d_name from appointments natural join doctors where a_id = {a_id}"
+    mydbcursor.execute(query)
+    return mydbcursor.fetchall()[0]
+
+def get_appointment_clinic(a_id):
+    global mydb, mydbcursor
+    query = f"select c_id, c_name from appointments natural join clinics where a_id = {a_id}"
+    mydbcursor.execute(query)
+    return mydbcursor.fetchall()[0]
 
 if __name__ == "__main__":
     

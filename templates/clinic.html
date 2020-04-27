@@ -14,8 +14,8 @@
             <form method="post" action="">
                 <button type="button">Manage Clinic timings</button>
             </form>
-            <form method="post" action="">
-                <button type="button">Manage Doctors</button>
+            <form method="post" action="clinic_doctors">
+                <button type="button" name = "c_id" value="{{c_id}}">Manage Doctors</button>
             </form>
             <form method="post" action="update_profile">
                 <button type="button" name="profile_type" value="clinic">Profile</button>
@@ -25,24 +25,25 @@
 		<table>
         <thead>
           <tr>
-            <th scope="col">Patient Name</th>
+            <th scope="col">Patient</th>
 			<th scope="col">Date Time</th>
 			<th scope="col">Doctor</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-			{% for name, datetime, doctor in appointments %}
+			{% for a_id, p_id, p_name, d_id, d_name, schedule, description in appointments %}
 				<tr>
-				<td>{{name}}</td>
-				<td>{{datetime}}</td>
-				<td>{{doctor}}</td>
+				<td>{{p_name}}</td>
+				<td>{{schedule}}</td>
+				<td>{{d_name}}</td>
+				<td>{{description}}</td>
 				<td>
                     <form method="post" action="">
                         <button type="button">Reschedule</button>
                     </form>
-					<form method="post" action="">
-                        <button type="button">Cancel</button>
+					<form method="post" action="clinic_cancel_appointment">
+                        <button type="button" name="a_id" value="{{a_id}}}">Cancel</button>
                     </form>
 				</td>
 				</tr>
