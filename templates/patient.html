@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dochub - Patient : {{  username }}</title>
+    <title>Dochub - Patient : {{ name }}</title>
 </head>
 <body>
     <nav>
@@ -19,17 +19,19 @@
         <thead>
           <tr>
             <th scope="col">Doctor</th>
-			<th scope="col">Date Time</th>
-			<th scope="col">Clinic</th>
+            <th scope="col">Date Time</th>
+            <th scope="col">Clinic</th>
+            <th scope="col">Description</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-			{% for doctor, datetime, clinic in appointments %}
+			{% for a_id, c_name, d_name, schedule, description in appointments %}
 				<tr>
-				<td>{{name}}</td>
-				<td>{{datetime}}</td>
-				<td>{{clinic}}</td>
+				<td>Dr. {{d_name}}</td>
+				<td>{{schedule}}</td>
+				<td>{{c_name}}</td>
+        <td>{{description}}</td>
 				<td>
 					<button type="button">Reschedule</button>
 					<button type="button">Cancel</button>

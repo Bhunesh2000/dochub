@@ -6,33 +6,38 @@
 </head>
 <body>
     {%  if usertype =="doctor" %}
-        <form method="post" action="">
-            <input type="text" id="name"  placeholder="Enter your name">
-            <input type="text" id="specialization" placeholder="You are specialized in..">
-            <input type="number" id="contact"  placeholder="Your contact number">
-            <input type="number" id="fee" placeholder="What fee you will charge? ">
+        <form method="post" action="new_doctor">
+            <input type="text" id="name" name='d_name' placeholder="Enter your name">
+            <input type="text" id="specialization" name='specialization' placeholder="Specialization">
+            <input type="text" id="contact" name='phone' placeholder="Your contact number">
+            <input type="number" id="fee" name='fee' placeholder="What fee you will charge? ">
+            <input type="text" id="username" name='username' placeholder="Enter new username">
+            <input type="password" id="password" name='password' placeholder="Enter new pssword">
+
             <button type="submit" >Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="patient" %}
-        <form method="post" action="">
-            <input type="text" id="name" placeholder="Enter your name">
+        <form method="post" action="new_patient">
+            <input type="text" id="name" name="p_name" placeholder="Enter your name">
             <label for="male">
-                <input type="radio" id="sex" value="male" > Male
+                <input type="radio" id="sex_m" name="sex" value="M" > Male
             </label>
             <label for="female">
-                <input type="radio" id="sex" value="female" > Female
+                <input type="radio" id="sex_f" name="sex" value="F" > Female
             </label>
-            <input type="number" id="age" placeholder="Your age here..">
-            <input type="number" id="contact" placeholder="Your contact number">
+            <input type="number" id="age" name="age" min="0" max="120" placeholder="Your age here">
+            <input type="text" id="contact" name="phone" placeholder="Your contact number">
+            <input type="text" id="username" name='username' placeholder="Enter new username">
+            <input type="password" id="password" name='password' placeholder="Enter new pssword">
             <button type="submit" >Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="clinic" %}
-        <form method="post" action="">
-            <input type="text" id="name" placeholder="Enter your name">
-            <input type="text" id="address" placeholder="Address">
-            <input type="number" id="contact" placeholder="Your contact number">
+        <form method="post" action="new_clinic">
+            <input type="text" id="name" name="c_name" placeholder="Enter your name">
+            <input type="text" id="address" name="address" placeholder="Address">
+            <input type="text" id="contact" name="phone" placeholder="Your contact number">
             <h4>Please select your opening days</h4>
             <input type="checkbox" id="days" name="days" value="Monday">
             <label for="days" >Monday</label>
@@ -52,14 +57,17 @@
             <input type="time" id="openingtime" name="openingtime" placeholder="Opening time">
             <input type="time" id="closingtime" name="closingtime" placeholder="Closing time">
             <h5>You can add/remove timings later </h5>
+            <input type="text" id="username" name='username' placeholder="Enter new username">
+            <input type="password" id="password" name='password' placeholder="Enter new pssword">
             <button type="submit" >Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="pharmacy" %}
-        <form method="post" action="">
-            <input type="text" id="name" placeholder="Enter your name">
-            <input type="text" id="specialization" placeholder="You are specialized in..">
-            <input type="number" id="contact" placeholder="Your contact number">
+        <form method="post" action="new_pharmacy">
+            <input type="text" id="name" name="pharma_name" placeholder="Enter your name">
+            <input type="number" id="contact" name="phone" placeholder="Your contact number">
+            <input type="text" id="username" name='username' placeholder="Enter new username">
+            <input type="password" id="password" name='password' placeholder="Enter new pssword">
             <button type="submit" >Create Account</button>
         </form>
     {% endif %}
