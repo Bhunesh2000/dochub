@@ -12,13 +12,13 @@
             </a>
             <a href="#">Welcome Mr. {{ name }}!</a>
             <form method="post" action="">
-                <button type="button">Book an Appointment</button>
+                <button type="submit">Book an Appointment</button>
             </form>
             <form method="post" action="">
-                <button type="button">See Medical history</button>
+                <button type="submit">See Medical history</button>
             </form>
             <form method="post" action="update_profile">
-                <button type="button" name="profile_type" value="patient">Profile</button>
+                <button type="submit" name="profile_type" value="patient">Profile</button>
             </form>
     </nav>
     <table>
@@ -38,10 +38,10 @@
 				<td>{{clinic}}</td>
 				<td>
                     <form method="post" action="">
-                        <button type="button">Reschedule</button>
+                        <button type="submit">Reschedule</button>
                     </form>
 					<form method="post" action="">
-                        <button type="button">Cancel</button>
+                        <button type="submit">Cancel</button>
                     </form>
 				</td>
 				</tr>
