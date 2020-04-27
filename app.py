@@ -49,6 +49,10 @@ def login_signup():
 def book_appointment():
     return render_template("bookappointment.html",diseases=['malaria',"common cold"],clinics=['apollo','mars hospital'],doctors=['dr. vats','dr.ramesh'],timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
 
+@app.route('/treat_patient',methods=['POST'])
+def treat_patient():
+    return render_template("treatpatient.html",past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
+
 @app.route('/update_profile',methods=['POST'])
 def update_profile():
     usertype=request.form.get('profile_type')
