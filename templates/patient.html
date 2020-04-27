@@ -11,9 +11,15 @@
             <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
             </a>
             <a href="#">Welcome Mr. {{ name }}!</a>
-            <button type="button">Book an Appointment</button>
-            <button type="button">See Medical history</button>
-            <button type="button">Profile</button>
+            <form method="post" action="">
+                <button type="button">Book an Appointment</button>
+            </form>
+            <form method="post" action="">
+                <button type="button">See Medical history</button>
+            </form>
+            <form method="post" action="update_profile">
+                <button type="button" name="profile_type" value="patient">Profile</button>
+            </form>
     </nav>
     <table>
         <thead>
@@ -33,8 +39,12 @@
 				<td>{{c_name}}</td>
         <td>{{description}}</td>
 				<td>
-					<button type="button">Reschedule</button>
-					<button type="button">Cancel</button>
+                    <form method="post" action="">
+                        <button type="button">Reschedule</button>
+                    </form>
+					<form method="post" action="">
+                        <button type="button">Cancel</button>
+                    </form>
 				</td>
 				</tr>
 			{% endfor %}
