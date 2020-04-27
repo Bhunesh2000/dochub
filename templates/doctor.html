@@ -3,7 +3,7 @@
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Dochub - Doctor: {{ username }}</title>
+		<title>Dochub - Doctor: {{ name }}</title>
         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <!-- jQuery library -->
@@ -35,15 +35,17 @@
             <th scope="col">Patient Name</th>
 			<th scope="col">Date Time</th>
 			<th scope="col">Clinic</th>
+			<th scope="col">Description</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-			{% for name, datetime, clinic in appointments %}
+			{% for a_id, p_id, p_name, c_name, schedule, description in appointments %}
 				<tr>
-				<td>{{name}}</td>
-				<td>{{datetime}}</td>
-				<td>{{clinic}}</td>
+				<td>{{p_name}}</td>
+				<td>{{schedule}}</td>
+				<td>{{c_name}}</td>
+				<td>{{description}}</td>
 				<td>
                     <form method="post" action="">
                         <button type="submit" class="btn btn-sm btn-success">Treat</button>
