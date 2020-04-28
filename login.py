@@ -329,12 +329,123 @@ def doctorSchedule(d_id,c_id,task):
     mydbcursor.execute(query)
     mydb.commit()
 
+def get_doc_schedules(d_id, c_id):
+    global mydb, mydbcursor
+    query = f"select day, start, end from schedules where d_id = {d_id} and c_id = {c_id}"
+    mydbcursor.execute(query)
+    schedules = mydbcursor.fetchall()
+    return schedules
+
+def get_c_name(c_id):
+    global mydb, mydbcursor
+    query = f"select c_name from clinics where c_id = {c_id}"
+    mydbcursor.execute(query)
+    c_name = mydbcursor.fetchall()[0][0]
+    return c_name
+
+def get_d_name(d_id):
+    global mydb, mydbcursor
+    query = f"select d_name from doctors where d_id = {d_id}"
+    mydbcursor.execute(query)
+    d_name = mydbcursor.fetchall()[0][0]
+    return d_name
+
+def get_p_name(p_id):
+    global mydb, mydbcursor
+    query = f"select p_name from patients where p_id = {p_id}"
+    mydbcursor.execute(query)
+    p_name = mydbcursor.fetchall()[0][0]
+    return p_name
+
+
+def get_specializations():
+    global mydb, mydbcursor
+    query = f"select distinct specialization from doctors natural join clinic_doctors"
+    mydbcursor.execute(query)
+    a = mydbcursor.fetchall()
+    print(a)
+    specializations = [i[0] for i in a]
+    return specializations
+
+def get_clinics_with_specialization(specialization):
+    global mydb, mydbcursor
+    query = f"select c_id, c_name from clinics where c_id in (select c_id from doctors natural join clinic_doctors where specialization = '{specialization}')"
+    mydbcursor.execute(query)
+    clinics = list(mydbcursor.fetchall())
+    return clinics
+
+def get_clinic_sp_docs(c_id, specialization):
+    global mydb, mydbcursor
+    query = f"select d_id, d_name from doctors natural join clinic_doctors where c_id = {c_id} and specialization = '{specialization}'"
+    mydbcursor.execute(query)
+    doctors = list(mydbcursor.fetchall())
+    return doctors
+
 def get_prescriptions(p_username):
     global mydb, mydbcursor
     query = f"select meds from prescriptions natural join login_patients where username = '{p_username}' and prescription_id = (select max(prescription_id) from prescriptions natural join login_patients where username = '{p_username}')"
     # lect description from (SELECT a_id, description from appointments natural join login_patients where username = 'shashwat90') t where a_id = (SELECT MAX(a_id) FROM appointments natural join login_patients where username = '{p_username}')
     mydbcursor.execute(query)
-    return list(mydbcursor.fetchall())
+    prescrptions = [i[0] for i in mydbcursor.fetchall()]
+    return prescrptions
+
+def get_past_prescriptions(p_id):
+    global mydb, mydbcursor
+    query = f"select meds from prescriptions where p_id = {p_id}"
+    mydbcursor.execute(query)
+    prescrptions = [i[0] for i in mydbcursor.fetchall()]
+    return prescrptions
+
+def get_medical_history(p_id):
+    global mydb, mydbcursor
+    query = f"select allergies, diabetes, bp, infectious_diseases, family_history, surgical_history from medical_histories where p_id = {p_id}"
+    mydbcursor.execute(query)
+    history = list(mydbcursor.fetchall())
+    allergies = [i[0] for i in history]
+    diabetes = [i[1] for i in history]
+    bp = [i[2] for i in history]
+    infections = [i[3] for i in history]
+    fam_history = [i[4] for i in history]
+    surgical_history = [i[5] for i in history]
+    return allergies, diabetes, bp, infections, fam_history, surgical_history
+
+def add_medical_history(p_id, _type, info):
+    global mydb, mydbcursor
+    query = f"insert into medical_histories(p_id, {_type}) values({p_id},'{info}')"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def add_report(p_id, d_id, symptoms, illness, test_req, test_rep):
+    global mydb, mydbcursor
+    query = f"insert into reports values(NULL, {p_id},{d_id}, '{symptoms}', '{illness}', '{test_req}', '{test_rep}')"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def add_prescription(p_id, d_id, meds):
+    global mydb, mydbcursor
+    query = f"insert into prescriptions values(NULL, {p_id}, {d_id}, '{meds}')"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def get_d_id_from_a_id(a_id):
+    global mydb, mydbcursor
+    query = f"select d_id from appointments where a_id = {a_id}"
+    mydbcursor.execute(query)
+    d_id = mydbcursor.fetchall()[0][0]
+    return d_id
+
+def get_past_reports(p_id):
+    global mydb, mydbcursor
+    query = f"select symptoms, illness, tests_required, test_reports from reports where p_id={p_id}"
+    mydbcursor.execute(query)
+    reports = list(mydbcursor.fetchall())
+    return reports
+    # symptoms = [i[0] for i in reports]
+    # illness = [i[1] for i in reports]
+    # test_required = [i[2] for i in reports]
+    # test_reports = [i[3] for i in reports]
+
+
 
 def get_appointment_doc(a_id):
     global mydb, mydbcursor

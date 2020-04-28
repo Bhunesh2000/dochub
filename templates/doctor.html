@@ -48,7 +48,7 @@
 				<td>{{description}}</td>
 				<td>
                     <form method="post" action="treat_patient">
-                        <button type="submit" name='a_id' value="{{a_id}}" class="btn btn-sm btn-success">Treat</button>
+                        <button type="submit" name='a_id' value="{{a_id}},{{p_id}},{{p_name}}" class="btn btn-sm btn-success">Treat</button>
                     </form>
 					<form method="post" action="reschedule_appointment">
                         <button type="submit" name='a_id' value="{{a_id}}" class="btn btn-sm btn-primary">Reschedule</button>

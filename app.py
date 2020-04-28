@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, url_for
 import login as db
+import datetime as dt
 
 app = Flask(__name__)
 app.secret_key = 'we_are_56'
@@ -47,11 +48,90 @@ def login_signup():
 
 @app.route('/book_appointment',methods=['POST'])
 def book_appointment():
-    return render_template("bookappointment.html",diseases=['malaria',"common cold"],clinics=['apollo','mars hospital'],doctors=['dr. vats','dr.ramesh'],timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
+    p_id = request.form.get('p_id')
+    specializations = db.get_specializations()
+    return render_template("bookappointment.html",specializations = specializations, p_id = p_id)
+
+@app.route('/select_specialization',methods=['POST'])
+def select_specialization():
+    p_id = request.form.get('p_id')
+    specialization = request.form.get('specialization')
+    clinics = db.get_clinic_with_specialization(specialization)
+    return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=clinics)
+
+@app.route('/select_clinic',methods=['POST'])
+def select_clinic():
+    c_id, c_name = request.form.get('clinic').split(',')
+    specialization,p_id = request.form.get('specialization')
+    doctors = db.get_clinic_sp_docs(c_id, specialization)
+    return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=[c_name], clinic = c_id, doctors = doctors)
+
+@app.route('/select_doctor',methods=['POST'])
+def select_doctor():
+    d_id, d_name = request.form.get('doctor').split(',')
+    p_id, specialization, c_id = request.form.get('specialization_clinic').split(',')
+    c_name = db.get_c_name(c_id)
+    schedules = db.get_doc_schedules(d_id, c_id)
+    timings = generate_timings(schedules)
+    return render_template("bookappointment.html",p_id = p_id,specializations = [specialization], specialization = specialization, clinics=[c_name], clinic = c_id, doctors = [d_name], doctor = d_id, timings = timings)
+
+@app.route('/confirm_booking',methods=['POST'])
+def confirm_booking():
+    timing = request.form.get('timing')
+    description = request.form.get('description')
+    p_id, specialization, c_id, d_id = request.form.get('specialization_clinic_doctor').split(',')
+    c_name = db.get_c_name(c_id)
+    d_name = db.get_d_name(d_id)
+    p_name = db.get_p_name(p_id)
+    db.new_appointment(p_id, d_id, c_id, timing)
+    return login_patient(p_id, p_name)
+
+
 
 @app.route('/treat_patient',methods=['POST'])
 def treat_patient():
-    return render_template("treatpatient.html",past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
+    a_id, p_id, p_name = request.form.get('a_id').split(',')
+    past_prescriptions = db.get_past_prescriptions(p_id)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    past_reports = db.get_past_reports(p_id)
+    return render_template("treatpatient.html",a_id = a_id, p_id = p_id, name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
+
+@app.route('/new_prescription',methods=['POST'])
+def new_prescription():
+    a_id, p_id, p_name = request.form.get('a_id').split(',')
+    meds = request.form.get('new_pres')
+    d_id = db.get_d_id_from_a_id(a_id)
+    db.add_prescription(p_id, d_id, meds)
+    past_prescriptions = db.get_past_prescriptions(p_id)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    past_reports = db.get_past_reports(p_id)
+    return render_template("treatpatient.html",a_id = a_id, p_id = p_id, name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
+
+
+@app.route('/add_med_history',methods=['POST'])
+def add_med_history():
+    type_disease,a_id, p_id, p_name = request.form.get('type_disease').split(',')
+    new_med_history = request.form.get('new_med_history')
+    db.add_medical_history(p_id, type_disease, new_med_history)
+    past_prescriptions = db.get_past_prescriptions(p_id)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    past_reports = db.get_past_reports(p_id)
+    return render_template("treatpatient.html",a_id = a_id, p_id = p_id, name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
+    # return render_template("treatpatient.html",name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
+
+@app.route('/add_report',methods=['POST'])
+def add_report():
+    a_id, p_id, p_name = request.form.get('a_id').split(',')
+    symptoms = request.form.get('symptoms')
+    disease = request.form.get('disease')
+    test_req = request.form.get('test_req')
+    test_rep = request.form.get('test_rep')
+    d_id = db.get_d_id_from_a_id(a_id)
+    db.add_report(p_id, d_id, symptoms, disease, test_req, test_rep)
+    past_prescriptions = db.get_past_prescriptions(p_id)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    past_reports = db.get_past_reports(p_id)
+    return render_template("treatpatient.html",a_id = a_id, p_id = p_id, name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
 
 @app.route('/update_profile',methods=['POST'])
 def update_profile():
@@ -105,10 +185,10 @@ def new_clinic():
         db.add_clinic_timing(c_id, day, openingtime, closingtime)
     return login_clinic(c_id, name)
 
-@app.route('/treat_patient', methods=['POST'])
-def treat_patient():
-    a_id = request.form.get('a_id')
-    return a_id
+# @app.route('/treat_patient', methods=['POST'])
+# def treat_patient():
+#     a_id = request.form.get('a_id')
+#     return a_id
 
 @app.route('/doc_cancel_appointment', methods=['POST'])
 def doc_cancel_appointment():
@@ -139,7 +219,7 @@ def login_doctor(d_id, d_name):
 def login_patient(p_id, p_name):
     appointments = db.view_patient_upcoming_appointments(p_id)
     print(appointments)
-    return render_template("patient.html",name=p_name, appointments = appointments)
+    return render_template("patient.html", p_id=p_id, name=p_name, appointments = appointments)
 
 def login_pharmacy(pharma_id, pharma_name):
     return render_template("pharmacy.html",name=pharma_name)
@@ -157,6 +237,36 @@ def fetch_prescriptions():
     print(prescriptions)
     print('yoyoyo')
     return render_template("pharmacy.html", name='', prescriptions=prescriptions)
+
+
+def generate_timings(schedules):
+    int_day = {'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6}
+    timings = []
+    for schedule in schedules:
+        date = dt.date.today()
+        today_date = dt.date.today()
+        time_now = round_time(dt.datetime.now().time())
+        while (date.weekday() != int_day[schedule[0].lower()]):
+            date += dt.timedelta(days=1)
+        start_datetime = dt.datetime.combine(date, schedule[1])
+        end_datetime = dt.datetime.combine(date, schedule[2])
+        if (date != today_date):
+            date = start_datetime
+        else:
+            date = round_time(dt.datetime.now())
+
+        while(end_datetime > date + dt.timedelta(minuets = 15)):
+            timings.append(date)
+            date = date + dt.timedelta(minuets = 15)
+    return timings
+
+def round_time(dat=None, round_to=60*15):
+   if dat == None: 
+       dat = dt.datetime.now()
+   seconds = (dat - dat.min).seconds
+   rounding = (seconds+round_to/2) // round_to * round_to
+   return dat + dt.timedelta(0,rounding-seconds,-dat.microsecond)
+            
 
 if __name__ == '__main__':
     # app.jinja_env.globals.update(get_i=get_i)
