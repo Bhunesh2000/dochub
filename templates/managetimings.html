@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Dochub - Manage Schedule </title>
+</head>
+<body>
+    <nav>
+                <a href="#">
+                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+                </a>
+    </nav>
+    <div>
+        <h4> Your Schedule </h4>
+        <form method="post" action="update_timings">
+        <table>
+        <thead>
+          <tr>
+            <th scope="col"> Days </th>
+            <th scope="col"> Timings </th>
+            <th scope="col"> Actions </th>
+          </tr>
+        </thead>
+        <tr>
+                <td> Monday </td>
+                <td>
+                    {% for timing in monday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="monday"> Edit/Add timings </button>
+                </td>
+            </tr>
+			<tr>
+                <td> Tuesday </td>
+                <td>
+                    {% for timing in tuesday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="tuesday"> Edit/Add timings </button>
+                </td>
+            </tr>
+            <tr>
+                <td> Wednesday </td>
+                <td>
+                    {% for timing in wednesday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="wednesday"> Edit/Add timings </button>
+                </td>
+            </tr>
+            <tr>
+                <td> Thursday </td>
+                <td>
+                    {% for timing in thursday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="thursday"> Edit/Add timings </button>
+                </td>
+            </tr>
+            <tr>
+                <td> Friday </td>
+                <td>
+                    {% for timing in friday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="friday"> Edit/Add timings </button>
+                </td>
+            </tr>
+            <tr>
+                <td> Saturday </td>
+                <td>
+                    {% for timing in saturday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="saturday"> Edit/Add timings </button>
+                </td>
+            </tr>
+            <tr>
+                <td> Sunday </td>
+                <td>
+                    {% for timing in sunday %}
+                        {{ timing }},
+                    {% endfor %}
+                </td>
+                <td>
+					<button type="submit" name="day" value="sunday"> Edit/Add timings </button>
+                </td>
+            </tr>
+		</tbody>
+		</table>
+        </form>
+	</div>
+</body>
+</html>

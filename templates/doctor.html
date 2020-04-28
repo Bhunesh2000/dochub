@@ -20,7 +20,7 @@
         <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
         </a>
         <a class="navbar-brand mx-auto" href="#">Welcome Dr. {{ name }}!</a>
-        <form method="post" action="">
+        <form method="post" action="manage_schedule">
             <button class="btn btn-sm btn-outline-info mr-2" type="submit">Manage Schedule</button>
         </form>
         <form action="update_profile" method="post" >
@@ -48,6 +48,7 @@
 				<td>{{description}}</td>
 				<td>
                     <form method="post" action="treat_patient">
+<<<<<<< HEAD
                         <button type="submit" name='a_id' value="{{a_id}},{{p_id}},{{p_name}}" class="btn btn-sm btn-success">Treat</button>
                     </form>
 					<form method="post" action="reschedule_appointment">
@@ -55,6 +56,15 @@
                     </form>
 					<form method="post" action="doc_cancel_appointment">
                         <button type="submit" name='a_id' value="{{a_id}}"class="btn btn-sm btn-danger">Cancel</button>
+=======
+                        <button type="submit" name="treat" class="btn btn-sm btn-success" value="{{ a_id }}">Treat</button>
+                    </form>
+					<form method="post" action="reschedule_app">
+                        <button type="submit" name="reschedule" class="btn btn-sm btn-primary" value="{{ a_id }}">Reschedule</button>
+                    </form>
+					<form method="post" action="cancel_app">
+                        <button type="submit" name="cancel" class="btn btn-sm btn-danger" value="{{ a_id }}">Cancel</button>
+>>>>>>> refs/remotes/origin/master
                     </form>
 				</td>
 				</tr>
