@@ -51,7 +51,89 @@ def book_appointment():
 
 @app.route('/treat_patient',methods=['POST'])
 def treat_patient():
-    return render_template("treatpatient.html",past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
+    a_id=request.form.get('treat')
+    _username=request.form.get('')  # get from a_id
+    return render_template("treatpatient.html",name=_username,past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
+
+@app.route('/reschedule_app',methods=['POST'])
+def reschedule_app():
+
+    return
+
+@app.route('/cancel_app',methods=['POST'])
+def cancel_app():
+    return
+
+@app.route('/new_pres',methods=['POST'])
+def new_pres():
+#    add prescription to db
+    a_id=request.form.get('treat')
+    _username=request.form.get('')  # get from a_id
+    return render_template('treatpatient.html',name=_username,past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
+
+@app.route('/manage_schedule',methods=['POST'])
+def manage_schedule():
+    #  doctor schedule
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+
+@app.route('/update_schedule',methods=['POST'])
+def update_schedule():
+    #  doctor schedule
+    _day=request.form.get('day')
+    return render_template('updateschedule.html',day=_day,timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
+
+@app.route('/update_delete_time',methods=['POST'])
+def update_delete_time():
+    temp=request.form.get('update_or_delete')
+    updateordelete=temp[:6]
+    if (updateordelete=='update'):
+        index=temp[6:]
+    #     update doctor schedule db
+    elif (updateordelete=='delete'):
+        index = temp[6:]
+    #     delete form doctor schedule db
+    else:
+        print('invalid')
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+
+@app.route('/add_time',methods=['POST'])
+def add_time():
+    openingtime = request.form.get('openingtime')
+    closingtime = request.form.get('closingtime')
+    # add time to doctor schedule db
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+
+@app.route('/manage_timings',methods=['POST'])
+def manage_schedule():
+    # for clinic
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+
+@app.route('/update_timings',methods=['POST'])
+def update_schedule():
+    # for clinic
+    _day=request.form.get('day')
+    return render_template('updateschedule.html',day=_day,timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
+
+@app.route('/update_delete_timings',methods=['POST'])
+def update_delete_time():
+    temp=request.form.get('update_or_delete')
+    updateordelete=temp[:6]
+    if (updateordelete=='update'):
+        index=temp[6:]
+    #     update db clinic
+    elif (updateordelete=='delete'):
+        index = temp[6:]
+    #     delete form db clinic
+    else:
+        print('invalid')
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+
+@app.route('/add_timings',methods=['POST'])
+def add_time():
+    openingtime = request.form.get('openingtime')
+    closingtime = request.form.get('closingtime')
+    # add time to db clinic
+    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/update_profile',methods=['POST'])
 def update_profile():

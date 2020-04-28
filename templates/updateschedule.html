@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <nav>
+                <a href="#">
+                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+                </a>
+    </nav>
+    <div>
+        <h4> {{ day }} </h4>
+        <form method="post" action="/update_delete_time">
+            {% i=0 %}
+            {% for opening_time,closing_time in timings %}
+                <label for="openingtime"> Opening time </label>
+                <input type="time" id="openingtime" name="openingtime" value="{{ opening_time }}">
+                <label for="closingtime"> Closing time </label>
+                <input type="time" id="closingtime" name="closingtime" value="{{closing_time}}">
+                <button type="submit" name="update_or_delete" value="update_{{ i }}"> Update </button>
+                <button type="submit" name="update_or_delete" value="delete_{{ i }}"> Delete </button>
+                {% i+=1 %}
+        </form>
+    </div>
+    <div>
+        <form method="post" action="/add_time">
+            <label for="openingtime"> Opening time </label>
+            <input type="time" id="openingtime" name="openingtime" placeholder="Opening time">
+            <label for="closingtime"> Closing time </label>
+            <input type="time" id="closingtime" name="closingtime" placeholder="Closing time">
+            <button type="submit" > Add timings </button>
+        </form>
+    </div>
+
+</body>
+</html>
