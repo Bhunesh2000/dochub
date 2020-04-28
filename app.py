@@ -49,6 +49,7 @@ def login_signup():
 @app.route('/book_appointment',methods=['POST'])
 def book_appointment():
     p_id = request.form.get('p_id')
+    print(p_id, 'wex')
     specializations = db.get_specializations()
     return render_template("bookappointment.html",specializations = specializations, p_id = p_id)
 
@@ -56,15 +57,16 @@ def book_appointment():
 def select_specialization():
     p_id = request.form.get('p_id')
     specialization = request.form.get('specialization')
-    clinics = db.get_clinic_with_specialization(specialization)
+    clinics = db.get_clinics_with_specialization(specialization)
     return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=clinics)
 
 @app.route('/select_clinic',methods=['POST'])
 def select_clinic():
     c_id, c_name = request.form.get('clinic').split(',')
-    specialization,p_id = request.form.get('specialization')
+    specialization,p_id = request.form.get('specialization').split(',')
     doctors = db.get_clinic_sp_docs(c_id, specialization)
-    return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=[c_name], clinic = c_id, doctors = doctors)
+    print(specialization, c_id)
+    return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=[(c_id, c_name)], clinic = c_id, doctors = doctors)
 
 @app.route('/select_doctor',methods=['POST'])
 def select_doctor():
@@ -73,17 +75,19 @@ def select_doctor():
     c_name = db.get_c_name(c_id)
     schedules = db.get_doc_schedules(d_id, c_id)
     timings = generate_timings(schedules)
-    return render_template("bookappointment.html",p_id = p_id,specializations = [specialization], specialization = specialization, clinics=[c_name], clinic = c_id, doctors = [d_name], doctor = d_id, timings = timings)
+    print(timings, specialization)
+    print(p_id,'adext')
+    return render_template("bookappointment.html",p_id = p_id,specializations = [specialization], specialization = specialization, clinics=[(c_id, c_name)], clinic = c_id, doctors = [(d_id,d_name)], doctor = d_id, timings = timings)
 
 @app.route('/confirm_booking',methods=['POST'])
 def confirm_booking():
     timing = request.form.get('timing')
     description = request.form.get('description')
-    p_id, specialization, c_id, d_id = request.form.get('specialization_clinic_doctor').split(',')
+    p_id, specialization, c_id, d_id = request.form.get('specialization_clinic_doc').split(',')
     c_name = db.get_c_name(c_id)
     d_name = db.get_d_name(d_id)
     p_name = db.get_p_name(p_id)
-    db.new_appointment(p_id, d_id, c_id, timing)
+    db.new_appointment(p_id, d_id, c_id, timing, description)
     return login_patient(p_id, p_name)
 
 
@@ -182,18 +186,18 @@ def add_time():
     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/manage_timings',methods=['POST'])
-def manage_schedule():
+def manage():
     # for clinic
     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/update_timings',methods=['POST'])
-def update_schedule():
+def update():
     # for clinic
     _day=request.form.get('day')
     return render_template('updateschedule.html',day=_day,timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
 
 @app.route('/update_delete_timings',methods=['POST'])
-def update_delete_time():
+def update_delet_time():
     temp=request.form.get('update_or_delete')
     updateordelete=temp[:6]
     if (updateordelete=='update'):
@@ -207,7 +211,7 @@ def update_delete_time():
     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/add_timings',methods=['POST'])
-def add_time():
+def add_times():
     openingtime = request.form.get('openingtime')
     closingtime = request.form.get('closingtime')
     # add time to db clinic
@@ -298,7 +302,7 @@ def login_doctor(d_id, d_name):
 
 def login_patient(p_id, p_name):
     appointments = db.view_patient_upcoming_appointments(p_id)
-    print(appointments)
+    print(p_id, 'adsf')
     return render_template("patient.html", p_id=p_id, name=p_name, appointments = appointments)
 
 def login_pharmacy(pharma_id, pharma_name):
@@ -325,19 +329,24 @@ def generate_timings(schedules):
     for schedule in schedules:
         date = dt.date.today()
         today_date = dt.date.today()
-        time_now = round_time(dt.datetime.now().time())
+        # time_now = round_time(dt.datetime.now()).time()
+        print(type((schedule[1] + dt.datetime.min).time()))
+        print(type(schedule[1]))
+        print(type(schedule[2]))
+        start_time = (schedule[1] + dt.datetime.min).time()
+        end_time = (schedule[2] + dt.datetime.min).time()
         while (date.weekday() != int_day[schedule[0].lower()]):
             date += dt.timedelta(days=1)
-        start_datetime = dt.datetime.combine(date, schedule[1])
-        end_datetime = dt.datetime.combine(date, schedule[2])
+        start_datetime = dt.datetime.combine(date, start_time)
+        end_datetime = dt.datetime.combine(date, end_time)
         if (date != today_date):
             date = start_datetime
         else:
             date = round_time(dt.datetime.now())
 
-        while(end_datetime > date + dt.timedelta(minuets = 15)):
+        while(end_datetime >=    date + dt.timedelta(minutes = 15)):
             timings.append(date)
-            date = date + dt.timedelta(minuets = 15)
+            date = date + dt.timedelta(minutes = 15)
     return timings
 
 def round_time(dat=None, round_to=60*15):

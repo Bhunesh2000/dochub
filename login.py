@@ -228,9 +228,9 @@ def view_patient_past_appointments(p_id):
     return appointments
 
 
-def new_appointment(p_id, d_id, c_id, datetime):
+def new_appointment(p_id, d_id, c_id, datetime, description):
     global mydb, mydbcursor
-    query = f"insert into appointments values(NULL,{p_id},{d_id},{c_id},'{datetime}')"
+    query = f"insert into appointments values(NULL,{p_id},{d_id},{c_id},'{datetime}','{description}')"
     insert(query)
 
 def delete_appointment(a_id):

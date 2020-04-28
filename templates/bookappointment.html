@@ -32,7 +32,7 @@
                     <option name = 'clinic' value="{{ c_id }},{{c_name}}"> {{c_name}} </option>
                 {% endfor %}
             </select>
-            <button type="submit" name = 'specialization' value="{{speacialization}},{{p_id}}">Next</button>
+            <button type="submit" name = 'specialization' value="{{specialization}},{{p_id}}">Next</button>
         </form>
     {% endif %}
     </div>
@@ -46,13 +46,13 @@
                     <option value="{{ d_id }},{{d_name}}"> {{d_name}} </option>
                 {% endfor %}
             </select>
-            <button type="submit" name = 'specialization_clinic' value="{{p_id}},{{speacialization}},{{clinic}}">Next</button>
+            <button type="submit" name = 'specialization_clinic' value="{{p_id}},{{specialization}},{{clinic}}">Next</button>
         </form>
     {% endif %}
     </div>
 
     <div>
-    {% if speacialization and clinic and doctor%}
+    {% if specialization and clinic and doctor%}
         <form method = 'post' action = 'confirm_booking'>
             <label for="timing"> Select time convenient to you </label>
             <select id="timing" name='timing'>
