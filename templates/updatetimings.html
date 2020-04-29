@@ -13,15 +13,14 @@
     <div>
         <h4> {{ day }} </h4>
         <form method="post" action="/update_delete_timings">
-            {% i=0 %}
             {% for opening_time,closing_time in timings %}
                 <label for="openingtime"> Opening time </label>
                 <input type="time" id="openingtime" name="openingtime" value="{{ opening_time }}">
                 <label for="closingtime"> Closing time </label>
                 <input type="time" id="closingtime" name="closingtime" value="{{closing_time}}">
-                <button type="submit" name="update_or_delete" value="update_{{ i }}"> Update </button>
-                <button type="submit" name="update_or_delete" value="delete_{{ i }}"> Delete </button>
-                {% i+=1 %}
+                <button type="submit" name="update_or_delete" value="update_{{ loop.index }}"> Update </button>
+                <button type="submit" name="update_or_delete" value="delete_{{ loop.index }}"> Delete </button>
+            {% endfor %}
         </form>
     </div>
     <div>
