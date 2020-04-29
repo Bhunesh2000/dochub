@@ -3,68 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dochub - Book an appointment </title>
+    <title>Dochub - Book Appointment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
-    <nav>
-                <a href="#">
-                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
-                </a>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Book Appointment</a>
+            <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+            <button class="invisible btn btn-sm btn-outline-info" type="submit" name="profile_type" value="doctor,{{d_id}}">Profile</button>
     </nav>
+    <div class="container pt-5 col-5">
+        <div class="">
+            <form method='post' action='select_specialization'>
+            <label for="disease"> Select Specialization</label>
+                <div class="input-group">
+                    <select name = 'specialization' class="custom-select" id="disease">
+                        {% for speacialization in specializations %}
+                            <option value="{{speacialization}}"> {{speacialization}} </option>
+                        {% endfor %}
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary" type="submit" name='p_id' value="{{p_id}}">Next</button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-    <div>
-    <form method='post' action='select_specialization'>
-        <label for="disease"> What are you suffering from ? </label>
-        <select name = 'specialization' id="disease">
-            {% for speacialization in specializations %}
-                <option value="{{speacialization}}"> {{speacialization}} </option>
-            {% endfor %}
-        </select>
-        <button type="submit" name='p_id' value="{{p_id}}">Next</button>
-    </form>
-    <div>
-    <div>
     {% if specialization %}
+    <div class="">
         <form method = 'post' action = 'select_clinic'>
-            <label for="clinic"> Choose a clinic </label>
-            <select id="clinic" name='clinic'>
-                {% for c_id, c_name in clinics %}
-                    <option name = 'clinic' value="{{ c_id }},{{c_name}}"> {{c_name}} </option>
-                {% endfor %}
-            </select>
-            <button type="submit" name = 'specialization' value="{{specialization}},{{p_id}}">Next</button>
+            <label for="clinic"> Select clinic </label>
+            <div class="input-group">
+                <select id="clinic" name='clinic' class="custom-select">
+                    {% for c_id, c_name in clinics %}
+                        <option name = 'clinic' value="{{ c_id }},{{c_name}}"> {{c_name}} </option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-primary" name='specialization' value="{{specialization}},{{p_id}}">Next</button>
+                </div>
+            </div>
         </form>
-    {% endif %}
     </div>
+    {% endif %}
 
-    <div>
     {% if specialization and clinic %}
+    <div class="">
         <form method = 'post' action = 'select_doctor'>
-            <label for="doctor"> Select the doctor you want to book appointment with </label>
-            <select id="doctor" name='doctor'>
-                {% for d_id, d_name in doctors %}
-                    <option value="{{ d_id }},{{d_name}}"> {{d_name}} </option>
-                {% endfor %}
-            </select>
-            <button type="submit" name = 'specialization_clinic' value="{{p_id}},{{specialization}},{{clinic}}">Next</button>
+            <label for="doctor"> Select Doctor</label>
+            <div class="input-group">
+                <select id="doctor" name='doctor' class="custom-select">
+                    {% for d_id, d_name in doctors %}
+                        <option value="{{ d_id }},{{d_name}}"> {{d_name}} </option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-primary" name='specialization_clinic' value="{{p_id}},{{specialization}},{{clinic}}">Next</button>
+                </div>
+            </div>
         </form>
-    {% endif %}
     </div>
-
-    <div>
+    {% endif %}
+    
     {% if specialization and clinic and doctor%}
+    <div class="">
         <form method = 'post' action = 'confirm_booking'>
-            <label for="timing"> Select time convenient to you </label>
-            <select id="timing" name='timing'>
-                {% for timing in timings %}
-                    <option value="{{ timing }}"> {{ timing }} </option>
-                {% endfor %}
-            </select>
-            <label for="description">Description</label>
-            <input type="text" id="description" name="description" placeholder="Enter description here">
-            <button type="submit" name = 'specialization_clinic_doc' value="{{p_id}},{{speacialization}},{{clinic}},{{doctor}}">Book</button>
+            <label for="timing"> Select Time</label>
+            <div class="input-group">
+                <select id="timing" name='timing' class="custom-select">
+                    {% for timing in timings %}
+                        <option value="{{ timing }}"> {{ timing }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+                <label for="description">Description</label>
+            <div class="input-group">
+                <input type="text" id="description" name="description" placeholder="Enter description here" class="form-control">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-success" name='specialization_clinic_doc' value="{{p_id}},{{speacialization}},{{clinic}},{{doctor}}">Book</button>
+                </div>
+            </div>
         </form>
     {% endif %}
     </div>
+    <div>
 </body>
 </html>

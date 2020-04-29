@@ -2,48 +2,98 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dochub - SignUp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Sign Up</a>
+        <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+        <button class="invisible btn btn-sm btn-outline-info" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+    </nav>
+    
+	<div class="container pt-5">
     {%  if usertype =="doctor" %}
         <form method="post" action="new_doctor">
-            <label for="name"> Name </label>
-            <input type="text" id="name" name='d_name' placeholder="Enter your name">
-            <label for="specialization"> Specialization </label>
-            <input type="text" id="specialization"  name='specialization' placeholder="You are specialized in..">
-            <label for="contact"> Contact </label>
-            <input type="number" id="contact" name='phone' placeholder="Your contact number">
-            <label for="fee"> Your Fees </label>
-            <input type="number" id="fee" name='fee' placeholder="What fee you will charge? ">
-            <button type="submit" value="{{ username }}_{{ password }}">Create Account</button>
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="name"> Name </label>
+                        <input type="text" class="form-control" id="name" name='d_name' placeholder="Enter your name">
+                    </div>
+                    <div class="col">
+                        <label for="specialization"> Specialization </label>
+                        <input type="text" class="form-control" id="specialization"  name='specialization' placeholder="You are specialized in..">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="contact"> Contact </label>
+                        <input type="number" class="form-control" id="contact" name='phone' placeholder="Your contact number">
+                    </div>
+                    <div class="col">
+                        <label for="fee"> Your Fees </label>
+                        <input type="number" id="fee" class="form-control" name='fee' placeholder="What fee you will charge? ">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" name='user_pass' value="{{ username }},{{ password }}">Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="patient" %}
         <form method="post" action="new_patient">
-            <label for="name"> Name </label>
-            <input type="text" id="name" name="p_name" placeholder="Enter your name">
-            <label for="male">
-                <input type="radio" id="sex_m" name="sex" value="M" checked> Male
-            </label>
-            <label for="female">
-                <input type="radio" id="sex_f" name="sex" value="F" > Female
-            </label>
-            <label for="age"> Age </label>
-            <input type="number" id="age" name="age" min="0" max="120" placeholder="Your age here">
-            <label for="contact"> Contact </label>
-            <input type="text" id="contact" name="phone" placeholder="Your contact number">
-            <button type="submit" value="{{ username }}_{{ password }}">Create Account</button>
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col">
+                    <label for="name"> Name </label>
+                    <input type="text" class="form-control"  id="name" name="p_name" placeholder="Enter your name">
+                </div>
+                <div class="col">
+                    <label for="age"> Age </label>
+                    <input type="number" class="form-control" id="age" name="age" min="0" max="120" placeholder="Your age here">
+                </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-check-inline">
+                        <label for="male" class="form-check-label">
+                            <input type="radio" class="form-check-input" id="sex_m" name="sex" value="M" checked> Male
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label for="female" class="form-check-label">
+                            <input type="radio" class="form-check-input" id="sex_f" name="sex" value="F" > Female
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label for="contact"> Contact </label>
+                    <input type="text" class="form-control" id="contact" name="phone" placeholder="Your contact number">
+                </div>
+        </div>
+            <button type="submit" class="btn btn-primary" name='user_pass' value="{{ username }},{{ password }}">Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="clinic" %}
         <form method="post" action="new_clinic">
             <label for="name"> Name </label>
-            <input type="text" id="name" name="c_name" placeholder="Enter your name">
+            <input type="text" class="form-control"  id="name" name="c_name" placeholder="Enter your name">
             <label for="address"> Address </label>
-            <input type="text"  id="address" name="address" placeholder="Address">
+            <input type="text" class="form-control" id="address" name="address" placeholder="Address">
             <label for="contact"> Contact </label>
-            <input type="number" id="contact" name="phone" placeholder="Your contact number">
-            <h4>Please select your opening days</h4>
+            <input type="number" class="form-control" id="contact" name="phone" placeholder="Your contact number">
+            <h5 class="pt-2">Please select your opening days</h5>
             <input type="checkbox" id="days" name="days" value="Monday">
             <label for="days" >Monday</label>
             <input type="checkbox" id="days" name="days" value="Tuesday">
@@ -58,23 +108,24 @@
             <label for="days" >Saturday</label>
             <input type="checkbox" id="days" name="days" value="Sunday">
             <label for="days" >Sunday</label>
-            <h4>Enter your Clinic timings</h4>
+            <h5 class="pt-2">Enter timings</h5>
             <label for="openingtime"> Opening time </label>
-            <input type="time" id="openingtime" name="openingtime" placeholder="Opening time">
+            <input type="time" class="form-control" id="openingtime" name="openingtime" placeholder="Opening time">
             <label for="closingtime"> Closing time </label>
-            <input type="time" id="closingtime" name="closingtime" placeholder="Closing time">
-            <h5>You can add/remove timings later </h5>
-            <button type="submit" value="{{ username }}_{{ password }}">Create Account</button>
+            <input type="time" class="form-control" id="closingtime" name="closingtime" placeholder="Closing time">
+            <h5 class="pt-2">You can add/remove timings later </h5>
+            <button type="submit" class="mb-4 btn btn-primary" name='user_pass' value="{{ username }},{{ password }}">Create Account</button>
         </form>
     {% endif %}
     {% if usertype=="pharmacy" %}
         <form method="post" action="new_pharmacy">
             <label for="name"> Name </label>
-            <input type="text" id="name" name="pharma_name" placeholder="Enter your name">
+            <input type="text" class="form-control"  id="name" name="pharma_name" placeholder="Enter your name">
             <label for="contact"> Contact </label>
-            <input type="number" id="contact" name="phone" placeholder="Your contact number">
-            <button type="submit" value="{{ username }}_{{ password }}">Create Account</button>
+            <input type="number" class="form-control"  id="contact" name="phone" placeholder="Your contact number">
+            <button type="submit" class="mt-4 btn btn-primary" name='user_pass' value="{{ username }},{{ password }}">Create Account</button>
         </form>
     {% endif %}
+    </div>
 </body>
 </html>

@@ -1,37 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dochub - Pharmacy: {{ name }}</title>
+    <title>Dochub - Pharmacy: {{ name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
-    <nav>
-            <a href="#">
-            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
-            </a>
-            <a href="#">Welcome {{ name }}!</a>
-            <form method="post" action="update_profile">
-                <button type="submit" name="profile_type" value="pharmacy">Profile</button>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">{{ name }}</a>
+        <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+            <form method="post" action="view_profile">
+                <button type="submit" class="btn btn-sm btn-outline-info" name="profile_type" value="pharmacy,{{pharma_id}}">Profile</button>
             </form>
-
     </nav>
-	<div>
-        <h4>Enter Patient's detail to see Prescription</h4>
+    
+	<div class="container pt-5">
+        <div class="row justify-content-center pb-2">
+            <h5>Enter Patient's Username to See Prescription</h5>
+        </div>
+        <div class="row justify-content-center">
         <form method="post" action="fetch_prescriptions">
-            <input type="text" class="form-control" placeholder="Enter Username" id="username" name="username">
-            <button type="submit" class="btn btn-primary">See Prescription</button>
-        </form>
-	</div>
-    <div>
-        <form method="post" action="">
-                <button type="submit"> Scan QR Code</button>
+            <div class="form-group">
+                <div class="form-row">
+                    <input type="text" class="form-control" placeholder="Enter Username" id="username" name="username">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <button type="submit" class="btn btn-primary" name='pharma' value="{{name}},{{pharma_id}}">See Prescription</button>
+            </div>
         </form>
     </div>
-    {% if prescriptions!=0 %}
-    <div>
-        {{ prescriptions }}
-    </div
-    {% endif %}
+
+    <div class="container pt-5">
+        {% if prescriptions!=0 %}
+        <div class="row justify-content-center pb-2">
+            <h5>Prescriptions:</h5>
+        </div>
+        <div class="row justify-content-center pb-2">
+            {% for prescription in prescriptions  %}
+                {{prescription}},
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
 </body>
 </html>

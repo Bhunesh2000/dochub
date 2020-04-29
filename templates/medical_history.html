@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dochub - Patient : {{ name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">{{ name }}'s Medical History</a>
+              <button type="submit" class="invisible btn btn-sm btn-outline-info mr-2" name='p_id' value={{p_id}}>Book Appointment</button>
+              <button type="submit" class="invisible btn btn-sm btn-outline-info mr-2" name="p_id" value="{{p_id}}">Medical History</button>
+    </nav>
+
+    <div class="container pt-5">
+		<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col" style="width:20%">Type of Disease</th>
+            <th scope="col">Disease</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Allergies </td>
+                <td>
+                    {% for allergy in allergies %}
+                        {{ allergy }},
+                    {% endfor %}
+                </td>
+            </tr>
+			<tr>
+                <td>Diabetes </td>
+                <td>
+                    {% for diabete in diabetes %}
+                        {{ diabete }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Blood Pressure </td>
+                <td>
+                    {% for blood_pressure in bp %}
+                        {{ blood_pressure }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Infectious Diseases </td>
+                <td>
+                    {% for infec in infections %}
+                        {{ infec }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Family history </td>
+                <td>
+                    {% for fmly in fam_history %}
+                        {{ fmly }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>Surgical history </td>
+                <td>
+                    {% for surg in surgical_history %}
+                        {{ surg }},
+                    {% endfor %}
+                </td>
+            </tr>
+		</tbody>
+		</table>
+	</div>
+
+    <div class="container pt-2 mb-5">
+    <h5>Add Medical History </h5>
+    <form method="post" action="patient_add_med_history">
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col">
+                    <label for="allergies"> Allergies </label>
+                    <input type="text" class="form-control" id="allergies" name="allergies" placeholder="Enter Allergies">
+                </div>
+                <div class="col">
+                    <label for="diabetes"> Diabetes </label>
+                    <input type="text" class="form-control" id="diabetes" name="diabetes" placeholder="Enter Diabetes">
+                </div>
+                <div class="col">
+                    <label for="bp"> Blood Pressure </label>
+                    <input type="text" class="form-control" id="bp" name="bp" placeholder="Enter Blood Pressure">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label for="infectious_diseases"> Infectious Diseases </label>
+                    <input type="text" class="form-control" id="infectious_diseases" name="infectious_diseases" placeholder="Enter Infectious Diseases">
+                </div>
+                <div class="col">
+                    <label for="family_history"> Family History </label>
+                    <input type="text"class="form-control"  id="family_history" name="family_history" placeholder="Enter Family History">
+                </div>
+                <div class="col">
+                    <label for="surgical_history"> Surgical History </label>
+                    <input type="text" class="form-control" id="surgical_history" name="surgical_history" placeholder="Enter Surgical History">
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit" name='p_id' value="{{p_id}}"> Add </button>
+    </form>
+    <div>
+</body>
+</html>

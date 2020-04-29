@@ -2,105 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title> Dochub - Manage Schedule </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocHub: Manage Timings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
-    <nav>
-                <a href="#">
-                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
-                </a>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Manage Timings</a>
+            <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+            <button class="invisible btn btn-sm btn-outline-info" type="submit" name="profile_type" value="doctor,{{d_id}}">Profile</button>
     </nav>
-    <div>
-        <h4> Your Schedule </h4>
-        <form method="post" action="update_timings">
-        <table>
+    <div class="container pt-5">
+        <h4> Your Timings </h4>
+        <table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col"> Days </th>
-            <th scope="col"> Timings </th>
+            <th scope="col"> Start Time </th>
+            <th scope="col"> End Time </th>
             <th scope="col"> Actions </th>
           </tr>
         </thead>
+        {% for day, start, end in timings %}
         <tr>
-                <td> Monday </td>
-                <td>
-                    {% for timing in monday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="monday"> Edit/Add timings </button>
-                </td>
-            </tr>
-			<tr>
-                <td> Tuesday </td>
-                <td>
-                    {% for timing in tuesday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="tuesday"> Edit/Add timings </button>
-                </td>
-            </tr>
-            <tr>
-                <td> Wednesday </td>
-                <td>
-                    {% for timing in wednesday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="wednesday"> Edit/Add timings </button>
-                </td>
-            </tr>
-            <tr>
-                <td> Thursday </td>
-                <td>
-                    {% for timing in thursday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="thursday"> Edit/Add timings </button>
-                </td>
-            </tr>
-            <tr>
-                <td> Friday </td>
-                <td>
-                    {% for timing in friday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="friday"> Edit/Add timings </button>
-                </td>
-            </tr>
-            <tr>
-                <td> Saturday </td>
-                <td>
-                    {% for timing in saturday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="saturday"> Edit/Add timings </button>
-                </td>
-            </tr>
-            <tr>
-                <td> Sunday </td>
-                <td>
-                    {% for timing in sunday %}
-                        {{ timing }},
-                    {% endfor %}
-                </td>
-                <td>
-					<button type="submit" name="day" value="sunday"> Edit/Add timings </button>
-                </td>
-            </tr>
+            <td>{{day}}</td>
+            <td>{{start}}</td>
+            <td>{{end}}</td>
+            <td>
+                <form method="post" action="remove_timing">
+                    <button class="btn btn-sm btn-danger" type="submit" name='c_id_day_start_end' value="{{c_id}},{{day}},{{start}},{{end}}">Remove</button>
+                </form>
+            </td>
+        <tr>
+        {% endfor %}
 		</tbody>
 		</table>
         </form>
 	</div>
+     <div class="container pt-2">
+        <form method="post" action="add_clinic_timing">
+            <label for="day">Day</label>
+                <select name = 'day' id="day">
+                    <option value = "Monday">Monday</option>
+                    <option value = "Tuesday">Tuesday</option>
+                    <option value = "Wednesday">Wednesday</option>
+                    <option value = "Thursday">Thursday</option>
+                    <option value = "Friday">Friday</option>
+                    <option value = "Saturday">Saturday</option>
+                    <option value = "Sunday">Sunday</option>
+            </select>
+            <label for="start_time">Select Start Time</label>
+            <input type="time" id="start_time" name="start" min="07:00">
+            <label for="end_time">Select End Time</label>
+            <input type="time" id="end_time" name="end" min="12:00">
+            <button type="submit" class="btn btn-primary btn-sm" name = 'c_id' value="{{c_id}}"> Add Clinic Time </button>
+        </form>
+    </div>
 </body>
 </html>

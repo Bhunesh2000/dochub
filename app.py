@@ -49,7 +49,6 @@ def login_signup():
 @app.route('/book_appointment',methods=['POST'])
 def book_appointment():
     p_id = request.form.get('p_id')
-    print(p_id, 'wex')
     specializations = db.get_specializations()
     return render_template("bookappointment.html",specializations = specializations, p_id = p_id)
 
@@ -65,7 +64,6 @@ def select_clinic():
     c_id, c_name = request.form.get('clinic').split(',')
     specialization,p_id = request.form.get('specialization').split(',')
     doctors = db.get_clinic_sp_docs(c_id, specialization)
-    print(specialization, c_id)
     return render_template("bookappointment.html",p_id = p_id, specializations = [specialization], specialization = specialization, clinics=[(c_id, c_name)], clinic = c_id, doctors = doctors)
 
 @app.route('/select_doctor',methods=['POST'])
@@ -75,8 +73,6 @@ def select_doctor():
     c_name = db.get_c_name(c_id)
     schedules = db.get_doc_schedules(d_id, c_id)
     timings = generate_timings(schedules)
-    print(timings, specialization)
-    print(p_id,'adext')
     return render_template("bookappointment.html",p_id = p_id,specializations = [specialization], specialization = specialization, clinics=[(c_id, c_name)], clinic = c_id, doctors = [(d_id,d_name)], doctor = d_id, timings = timings)
 
 @app.route('/confirm_booking',methods=['POST'])
@@ -89,8 +85,6 @@ def confirm_booking():
     p_name = db.get_p_name(p_id)
     db.new_appointment(p_id, d_id, c_id, timing, description)
     return login_patient(p_id, p_name)
-
-
 
 @app.route('/treat_patient',methods=['POST'])
 def treat_patient():
@@ -114,9 +108,14 @@ def new_prescription():
 
 @app.route('/add_med_history',methods=['POST'])
 def add_med_history():
-    type_disease,a_id, p_id, p_name = request.form.get('type_disease').split(',')
-    new_med_history = request.form.get('new_med_history')
-    db.add_medical_history(p_id, type_disease, new_med_history)
+    a_id, p_id, p_name = request.form.get('a_id_p_id_name').split(',')
+    allergies = request.form.get('allergies')
+    diabetes = request.form.get('diabetes')
+    bp = request.form.get('bp')
+    infectious_diseases = request.form.get('infectious_diseases')
+    family_history = request.form.get('family_history')
+    surgical_history = request.form.get('surgical_history')
+    db.add_medical_history(p_id, allergies, diabetes, bp, infectious_diseases, family_history, surgical_history)
     past_prescriptions = db.get_past_prescriptions(p_id)
     allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
     past_reports = db.get_past_reports(p_id)
@@ -137,27 +136,50 @@ def add_report():
     past_reports = db.get_past_reports(p_id)
     return render_template("treatpatient.html",a_id = a_id, p_id = p_id, name = p_name, past_pres=past_prescriptions,allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history,past_reports=past_reports)
 
-@app.route('/reschedule_app',methods=['POST'])
-def reschedule_app():
-
-    return
-
-@app.route('/cancel_app',methods=['POST'])
-def cancel_app():
-    return
-
-@app.route('/new_pres',methods=['POST'])
-def new_pres():
-#    add prescription to db
-    a_id=request.form.get('treat')
-    _username=request.form.get('')  # get from a_id
-    return render_template('treatpatient.html',name=_username,past_pres=['sensodyne toothpaste'],allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'],past_reports=['stomach pain','gas','ultrasound','normal'])
 
 @app.route('/manage_schedule',methods=['POST'])
 def manage_schedule():
-    #  doctor schedule
-    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+    d_id = request.form.get('d_id')
+    schedules = db.get_doc_schedules(d_id)
+    clinics = db.get_doc_clinics(d_id)
+    return render_template('manageschedule.html', schedules = schedules, d_id = d_id, clinic_list = clinics)
 
+@app.route('/remove_schedule',methods=['POST'])
+def remove_schedule():
+    schedule_id, d_id = request.form.get('schedule_id')
+    db.remove_schedule(schedule_id)
+    schedules = db.get_doc_schedules(d_id)
+    clinics = db.get_doc_clinics(d_id)
+    return render_template('manageschedule.html', schedules = schedules, d_id = d_id, clinic_list = clinics)
+
+@app.route('/add_schedule_select_clinic',methods=['POST'])
+def add_schedule_select_clinic():
+    c_id = request.form.get('clinic')
+    d_id = request.form.get('d_id')
+    c_name = db.get_c_name(c_id)
+    schedules = db.get_doc_schedules(d_id)
+    clinic_timings = db.get_clinic_timings(c_id)
+    return render_template('manageschedule.html', schedules = schedules, d_id = d_id, clinic = c_id, clinic_list = [(c_id, c_name)], clinic_timings = clinic_timings)
+
+@app.route('/add_schedule_select_day_slot',methods=['POST'])
+def add_schedule_select_day_slot():
+    d_id, c_id = request.form.get('d_id_c_id').split(',')
+    c_name = db.get_c_name(c_id)
+    day, start, end = request.form.get('day_time').split(',')
+    schedules = db.get_doc_schedules(d_id)
+    return render_template('manageschedule.html', schedules = schedules, d_id = d_id, clinic = c_id, clinic_list = [(c_id, c_name)], clinic_timings = [(day, start, end)], day = day, start = start, end = end)
+
+@app.route('/add_schedule',methods=['POST'])
+def add_schedule():
+    d_id, c_id, day = request.form.get('d_id_c_id_day').split(',')
+    start = request.form.get('start_time')
+    end = request.form.get('end_time')
+    db.add_schedule(d_id, c_id, day, start, end)
+    schedules = db.get_doc_schedules(d_id)
+    clinics = db.get_doc_clinics(d_id)
+    return render_template('manageschedule.html', schedules = schedules, d_id = d_id, clinic_list = clinics)
+
+    
 @app.route('/update_schedule',methods=['POST'])
 def update_schedule():
     #  doctor schedule
@@ -178,37 +200,49 @@ def update_delete_time():
         print('invalid')
     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
-@app.route('/add_time',methods=['POST'])
-def add_time():
-    openingtime = request.form.get('openingtime')
-    closingtime = request.form.get('closingtime')
-    # add time to doctor schedule db
-    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/manage_timings',methods=['POST'])
-def manage():
-    # for clinic
-    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+def manage_timings():
+    c_id = request.form.get('c_id')
+    timings = db.get_clinic_timings(c_id)
+    return render_template('managetimings.html', c_id = c_id, timings = timings)
 
-@app.route('/update_timings',methods=['POST'])
-def update():
-    # for clinic
-    _day=request.form.get('day')
-    return render_template('updateschedule.html',day=_day,timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
+@app.route('/remove_timings',methods=['POST'])
+def remove_timings():
+    c_id,day, start, end = request.form.get('c_id_day_start_end')
+    db.remove_clinic_timing(c_id, day, start, end)
+    timings = db.get_clinic_timings(c_id)
+    return render_template('managetimings.html', c_id = c_id, timings = timings)
 
-@app.route('/update_delete_timings',methods=['POST'])
-def update_delet_time():
-    temp=request.form.get('update_or_delete')
-    updateordelete=temp[:6]
-    if (updateordelete=='update'):
-        index=temp[6:]
-    #     update db clinic
-    elif (updateordelete=='delete'):
-        index = temp[6:]
-    #     delete form db clinic
-    else:
-        print('invalid')
-    return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
+@app.route('/add_timings',methods=['POST'])
+def add_timings():
+    c_id = request.form.get('c_id')
+    day = request.form.get('day')
+    start = request.form.get('start')
+    end = request.form.get('end')
+    db.add_clinic_timing(c_id, day, start, end)
+    timings = db.get_clinic_timings(c_id)
+    return render_template('managetimings.html', c_id = c_id, timings = timings)
+
+# @app.route('/update_timings',methods=['POST'])
+# def update():
+#     # for clinic
+#     _day=request.form.get('day')
+#     return render_template('updateschedule.html',day=_day,timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
+
+# @app.route('/update_delete_timings',methods=['POST'])
+# def update_delet_time():
+#     temp=request.form.get('update_or_delete')
+#     updateordelete=temp[:6]
+#     if (updateordelete=='update'):
+#         index=temp[6:]
+#     #     update db clinic
+#     elif (updateordelete=='delete'):
+#         index = temp[6:]
+#     #     delete form db clinic
+#     else:
+#         print('invalid')
+#     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
 @app.route('/add_timings',methods=['POST'])
 def add_times():
@@ -217,19 +251,85 @@ def add_times():
     # add time to db clinic
     return render_template('manageschedule.html',monday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],tuesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],wednesday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],thursday=[],friday=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'],saturday=[],sunday=[])
 
+@app.route('/view_profile',methods=['POST'])
+def view_profile():
+    usertype, user_id=request.form.get('profile_type').split(',')
+    user_details, user_info = db.get_user_details(usertype, user_id)
+    username, password = user_info
+    if usertype == 'patient':
+        name, sex, age, phone = user_details
+        return render_template("profile.html",usertype=usertype, name=name,sex=sex, age=age, contact=phone, username = username, password = password, user_id = user_id)
+    elif usertype == 'doctor':
+        name, specialization, fee, contact = user_details
+        return render_template("profile.html",usertype=usertype,name=name,specialization=specialization,contact=contact,fee=fee, username = username, password = password, user_id = user_id)
+    elif usertype == 'pharmacy':
+        name, phone = user_details
+        return render_template("profile.html",usertype=usertype, name=name, contact=phone, username = username, password = password, user_id = user_id)
+    elif usertype == 'clinic':
+        name, address, phone = user_details
+        return render_template("profile.html",usertype=usertype, name=name,addreess=address, contact=phone, username = username, password = password, user_id = user_id)
+    return
+
+
+@app.route('/view_medical_history', methods = ['POST'])
+def view_medical_history():
+    p_id = request.form.get('p_id')
+    p_name = db.get_p_name(p_id)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    return render_template("medical_history.html",p_id = p_id, name = p_name, allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history)
+
+@app.route('/patient_add_med_history', methods = ['POST'])
+def patient_add_med_history():
+    p_id = request.form.get('p_id')
+    p_name = db.get_p_name(p_id)
+    allergies = request.form.get('allergies')
+    diabetes = request.form.get('diabetes')
+    bp = request.form.get('bp')
+    infectious_diseases = request.form.get('infectious_diseases')
+    family_history = request.form.get('family_history')
+    surgical_history = request.form.get('surgical_history')
+    db.add_medical_history(p_id, allergies, diabetes, bp, infectious_diseases, family_history, surgical_history)
+    allergies, diabetes, bp, infections, fam_history, surgical_history = db.get_medical_history(p_id)
+    return render_template("medical_history.html",p_id = p_id, name = p_name, allergies=allergies,diabetes=diabetes,bp=bp,infections=infections,fam_history=fam_history,surgical_history=surgical_history)
+
+
 @app.route('/update_profile',methods=['POST'])
 def update_profile():
-    usertype=request.form.get('profile_type')
-    print(usertype)
-    if usertype == 'patient':
-        return render_template("profile.html",usertype=usertype, name='Rishab',sex='male', age='20', contact=9876543210)
-    elif usertype == 'doctor':
-        return render_template("profile.html",usertype=usertype,name='Shashwat',specialization='heart',contact=9876543210,fee=300)
+    usertype, user_id=request.form.get('usertype_id').split(',')
+    contact = request.form.get('contact')
+    db.update_phone(usertype, user_id, contact)
+    if usertype == 'doctor':
+        fee = request.form.get('fee')
+        db.update_doc_fee(user_id, fee)
+        d_name = db.get_d_name(user_id)
+        return login_doctor(user_id,d_name)
     elif usertype == 'pharmacy':
-        return render_template("profile.html", usertype=usertype,name='Apollo pharmacy',contact=9876543210)
+        return login_pharmacy(user_id, '')
     elif usertype == 'clinic':
-        return render_template("profile.html",usertype=usertype,name='Mars hospital',address='Delhi',contact=9876543210 )
-    return
+        c_name = db.get_c_name(user_id)
+        return login_clinic(user_id, c_name)
+    elif usertype == 'patient':
+        p_name = db.get_p_name(user_id)
+        return login_patient(user_id, p_name)
+
+@app.route('/change_password', methods = ['POST'])
+def change_password():
+
+    usertype, user_id = request.form.get('usertype_id').split(',')
+    password = request.form.get('password')
+    db.change_password(usertype, user_id, password)
+    if usertype == 'doctor':
+        d_name = db.get_d_name(user_id)
+        return login_doctor(user_id,d_name)
+    elif usertype == 'pharmacy':
+        return login_pharmacy(user_id, '')
+    elif usertype == 'clinic':
+        c_name = db.get_c_name(user_id)
+        return login_clinic(user_id, c_name)
+    elif usertype == 'patient':
+        p_name = db.get_p_name(user_id)
+        return login_patient(user_id, p_name)
+
 
 @app.route('/new_doctor', methods=['POST'])
 def new_doctor():
@@ -273,6 +373,12 @@ def new_clinic():
 # def treat_patient():
 #     a_id = request.form.get('a_id')
 #     return a_id
+@app.route('/patient_cancel_appointment', methods=['POST'])
+def patient_cancel_appointment():
+    a_id = request.form.get('a_id')
+    p_id, p_name = db.get_appointment_patient(a_id)
+    db.delete_appointment(a_id)
+    return login_patient(p_id, p_name)
 
 @app.route('/doc_cancel_appointment', methods=['POST'])
 def doc_cancel_appointment():
@@ -291,36 +397,41 @@ def clinic_cancel_appointment():
 @app.route('/clinic_doctors', methods=['POST'])
 def clinic_doctors():
     c_id = request.form.get('c_id')
+    c_name = db.get_c_name(c_id)
     doctors = db.view_clinic_docs(c_id)
-    return doctors
+    available_doctors = db.get_clinic_available_doctor(c_id)
+    return render_template("clinic_docs.html", doctors = doctors, c_id = c_id, c_name = c_name, available_doctors = available_doctors)
+
+@app.route('/remove_clinic_doctor', methods=['POST'])
+def remove_clinic_doctor():
+    c_id, d_id = request.form.get('c_id_d_id').split(',')
+    c_name = db.get_c_name(c_id)
+    db.clinic_remove_doc(c_id, d_id)
+    doctors = db.view_clinic_docs(c_id)
+    available_doctors = db.get_clinic_available_doctor(c_id)
+    return render_template("clinic_docs.html", doctors = doctors, c_id = c_id, c_name = c_name, available_doctors = available_doctors)
+
+@app.route('/add_clinic_doctor', methods=['POST'])
+def add_clinic_doctor():
+    c_id = request.form.get('c_id')
+    d_id = request.form.get('d_id')
+    salary = request.form.get('salary')
+    c_name = db.get_c_name(c_id)
+    db.clinic_add_doc(c_id, d_id, salary)
+    doctors = db.view_clinic_docs(c_id)
+    available_doctors = db.get_clinic_available_doctor(c_id)
+    return render_template("clinic_docs.html", doctors = doctors, c_id = c_id, c_name = c_name, available_doctors = available_doctors)
 
 
-def login_doctor(d_id, d_name):
-    appointments = db.view_doc_upcoming_appointments(d_id)
-    print(appointments)
-    return render_template("doctor.html", name=d_name, appointments=appointments)
-
-def login_patient(p_id, p_name):
-    appointments = db.view_patient_upcoming_appointments(p_id)
-    print(p_id, 'adsf')
-    return render_template("patient.html", p_id=p_id, name=p_name, appointments = appointments)
-
-def login_pharmacy(pharma_id, pharma_name):
-    return render_template("pharmacy.html",name=pharma_name)
-
-def login_clinic(c_id, c_name):
-    appointments = db.view_clinic_upcoming_appointments(c_id)
-    return render_template("clinic.html",name=c_name, c_id = c_id, appintments=appointments)
 
 @app.route('/fetch_prescriptions', methods=['POST'])
 def fetch_prescriptions():
     _username = request.form.get('username')
+    pharma_name, pharma_id = request.form.get('pharma').split(',')
     prescriptions = db.get_prescriptions(_username)
     if len(prescriptions) == 0:
         prescriptions = 0
-    print(prescriptions)
-    print('yoyoyo')
-    return render_template("pharmacy.html", name='', prescriptions=prescriptions)
+    return render_template("pharmacy.html",name=pharma_name, pharma_id = pharma_id, prescriptions=prescriptions)
 
 
 def generate_timings(schedules):
@@ -329,10 +440,6 @@ def generate_timings(schedules):
     for schedule in schedules:
         date = dt.date.today()
         today_date = dt.date.today()
-        # time_now = round_time(dt.datetime.now()).time()
-        print(type((schedule[1] + dt.datetime.min).time()))
-        print(type(schedule[1]))
-        print(type(schedule[2]))
         start_time = (schedule[1] + dt.datetime.min).time()
         end_time = (schedule[2] + dt.datetime.min).time()
         while (date.weekday() != int_day[schedule[0].lower()]):
@@ -348,6 +455,21 @@ def generate_timings(schedules):
             timings.append(date)
             date = date + dt.timedelta(minutes = 15)
     return timings
+
+def login_doctor(d_id, d_name):
+    appointments = db.view_doc_upcoming_appointments(d_id)
+    return render_template("doctor.html", d_id = d_id, name=d_name, appointments=appointments)
+
+def login_patient(p_id, p_name):
+    appointments = db.view_patient_upcoming_appointments(p_id)
+    return render_template("patient.html", p_id=p_id, name=p_name, appointments = appointments)
+
+def login_pharmacy(pharma_id, pharma_name):
+    return render_template("pharmacy.html",name=pharma_name, pharma_id = pharma_id)
+
+def login_clinic(c_id, c_name):
+    appointments = db.view_clinic_upcoming_appointments(c_id)
+    return render_template("clinic.html",name=c_name, c_id = c_id, appointments=appointments)
 
 def round_time(dat=None, round_to=60*15):
    if dat == None: 

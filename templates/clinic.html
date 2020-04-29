@@ -1,33 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dochub - Clinic: {{ username }}</title>
+    <title>DocHub: {{name}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
-    <nav>
-            <a href="#">
-            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
-            </a>
-            <a href="#">Welcome {{ name }}!</a>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">{{ name }}</a>
             <form method="post" action="manage_timings">
-                <button type="submit">Manage Clinic timings</button>
+                <button type="submit" class="btn btn-sm btn-outline-info mr-2" name = "c_id" value="{{c_id}}">Manage Clinic Timings</button>
             </form>
             <form method="post" action="clinic_doctors">
-                <button type="button" name = "c_id" value="{{c_id}}">Manage Doctors</button>
+                <button type="submit" class="btn btn-sm btn-outline-info mr-2" name = "c_id" value="{{c_id}}">Manage Doctors</button>
             </form>
-            <form action="update_profile" method="post" >
-                <button type="submit" name="profile_type" value="clinic">Profile</button>
+            <form action="view_profile" method="post" >
+                <button type="submit" class="btn btn-sm btn-outline-info" name="profile_type" value="clinic,{{c_id}}">Profile</button>
             </form>
     </nav>
-	<div>
-		<table>
+    <div class="container pt-5">
+            
+		<table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">Patient</th>
 			<th scope="col">Date Time</th>
 			<th scope="col">Doctor</th>
+            <th scope="col">Description</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -39,11 +50,8 @@
 				<td>{{d_name}}</td>
 				<td>{{description}}</td>
 				<td>
-                    <form method="post" action="">
-                        <button type="submit">Reschedule</button>
-                    </form>
 					<form method="post" action="clinic_cancel_appointment">
-                        <button type="button" name="a_id" value="{{a_id}}}">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-danger" name="a_id" value="{{a_id}}}">Cancel</button>
                     </form>
 				</td>
 				</tr>

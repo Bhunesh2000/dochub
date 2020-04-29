@@ -1,5 +1,6 @@
 import stdiomask
 import mysql.connector
+import datetime as dt
 
 mydb = mysql.connector.connect(
     host = "localhost",
@@ -79,6 +80,67 @@ def validate_login(user_type, username, password):
         return ids[0]
     return (0,0)
 
+
+
+def get_user_details(type, user_id):
+    global mydb, mydbcursor
+    login_table = 'login_'
+    table = ''
+    x_id = type[0] + '_id'
+    if(type == 'clinic'):
+        table = 'clinics'
+        login_table += 'clinics'
+    elif(type=='doctor'):
+        table = 'doctors'
+        login_table += 'doctors'
+    elif(type=='patient'):
+        table = 'patients'
+        login_table += 'patients'
+    elif(type=='pharmacy'):
+        table = 'pharmacies'
+        x_id = 'pharma_id'
+        login_table += 'pharmacies'
+    query = f"select * from {table} where {x_id} = {user_id};"
+    mydbcursor.execute(query)
+    user_details = mydbcursor.fetchall()[0][1:]
+    query = f"select username, password from {login_table} where {x_id} = {user_id};"
+    mydbcursor.execute(query)
+    user_info = mydbcursor.fetchall()[0]
+    return user_details, user_info
+
+def update_phone(usertype, user_id, contact):
+    global mydb, mydbcursor
+    field = 'phone'
+    x_id = usertype[0] + '_id'
+    table = usertype+'s'
+    if(usertype=='clinic'):
+        field = 'c_phone'
+    if(usertype=='doctor'):
+        field = 'contact'
+    if(usertype=='pharmacy'):
+        x_id = 'pharma_id'
+        table = 'pharmacies'
+    query = f"update {table} set {field}='{contact}' where {x_id}={user_id}"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def change_password(usertype, user_id, password):
+    global mydb, mydbcursor
+    login_table = 'login_'
+    x_id = usertype[0] + '_id'
+    if(usertype == 'clinic'):
+        login_table += 'clinics'
+    elif(usertype=='doctor'):
+        login_table += 'doctors'
+    elif(usertype=='patient'):
+        login_table += 'patients'
+    elif(usertype=='pharmacy'):
+        login_table += 'pharmacies'
+        x_id = 'pharma_id'
+    query = f"update {login_table} set password = '{password}' where {x_id} = {user_id};"
+    mydbcursor.execute(query)
+    mydb.commit()
+
 def create_user(type, x_id, username, password):
     login_table = 'login_'
     x_id = ''
@@ -145,7 +207,7 @@ def new_pharmacy(name, phone, username, password):
 
 def view_clinic_upcoming_appointments(c_id):
     global mydb, mydbcursor
-    query = f"select a_id, p_id, p_name, d_id, d_name, schedule, description from appointments natural join doctors natural join patients where c_id = {c_id} and schedule >= now()"
+    query = f"select a_id, p_id, p_name, d_id, d_name, schedule, description from appointments natural join doctors natural join patients where c_id = {c_id} and schedule >= now() order by schedule"
     mydbcursor.execute(query)
     appointments = map(lambda x: x[:-2] + (x[-2].strftime("%d-%b-%Y %I:%M"),x[-1]) , mydbcursor.fetchall())
     appointments = list(appointments)
@@ -163,9 +225,9 @@ def view_clinic_past_appointments(c_id):
 def view_doc_upcoming_appointments(d_id, c_id = 0):
     global mydb, mydbcursor
     if(c_id):
-        query = f"select a_id, p_id, p_name, c_name, schedule, description from appointments natural join clinics natural join patients where d_id = {d_id} and c_id = {c_id} and schedule >= now()"
+        query = f"select a_id, p_id, p_name, c_name, schedule, description from appointments natural join clinics natural join patients where d_id = {d_id} and c_id = {c_id} and schedule >= now() order by schedule"
     else:
-        query = f"select a_id, p_id, p_name, c_name, schedule, description from appointments natural join clinics natural join patients where d_id = {d_id} and schedule >= now()"
+        query = f"select a_id, p_id, p_name, c_name, schedule, description from appointments natural join clinics natural join patients where d_id = {d_id} and schedule >= now() order by schedule"
     mydbcursor.execute(query)
     appointments = map(lambda x: x[:-2] + (x[-2].strftime("%d-%b-%Y %I:%M"),x[-1]) , mydbcursor.fetchall())
     appointments = list(appointments)
@@ -182,6 +244,12 @@ def view_doc_past_appointments(d_id, c_id = 0):
     appointments = list(appointments)
     return appointments
 
+def update_doc_fee(d_id, fee):
+    global mydb, mydbcursor
+    query = f"update doctors set fee={fee} where d_id={d_id}"
+    mydbcursor.execute(query)
+    mydb.commit()
+
 def view_docs():
     global mydb, mydbcursor
     query = f"select * from doctors"
@@ -191,7 +259,7 @@ def view_docs():
 
 def view_clinic_docs(c_id):
     global mydb, mydbcursor
-    query = f"select * from doctors natural join clinic_doctors where c_id={c_id}"
+    query = f"select d_id, d_name, specialization, salary, joining_date from doctors natural join clinic_doctors where c_id={c_id}"
     mydbcursor.execute(query)
     doctors = list(mydbcursor.fetchall())
     return doctors
@@ -202,6 +270,12 @@ def clinic_add_doc(c_id, d_id, salary):
     mydbcursor.execute(query)
     mydb.commit()
 
+def get_clinic_available_doctor(c_id):
+    global mydb, mydbcursor
+    query  = f"select d_id, d_name from doctors natural join clinic_doctors where c_id <> {c_id}"
+    mydbcursor.execute(query)
+    return list(mydbcursor.fetchall())
+    
 def clinic_remove_doc(c_id, d_id):
     global mydb, mydbcursor
     query = f"DELETE FROM  clinic_doctors WHERE c_id = {c_id} and d_id = {d_id}"
@@ -213,7 +287,7 @@ def clinic_remove_doc(c_id, d_id):
 
 def view_patient_upcoming_appointments(p_id):
     global mydb, mydbcursor
-    query = f"select a_id, c_name, d_name, schedule, description from appointments natural join doctors natural join clinics where p_id = {p_id} and schedule >= now()"
+    query = f"select a_id, c_name, d_name, schedule, description from appointments natural join doctors natural join clinics where p_id = {p_id} and schedule >= now() order by schedule"
     mydbcursor.execute(query)
     appointments = map(lambda x: x[:-2] + (x[-2].strftime("%d-%b-%Y %I:%M"),x[-1]) , mydbcursor.fetchall())
     appointments = list(appointments)
@@ -257,7 +331,7 @@ def show_schedules(d_id):
 
 def add_clinic_timing(c_id, day, start, end):
     global mydb, mydbcursor
-    query = f"insert into clinic_timings values({c_id},'{day}','{start}', '{end}')"
+    query = f"insert into clinics_timings values({c_id},'{day}','{start}', '{end}')"
     mydbcursor.execute(query)
     mydb.commit()
 
@@ -329,12 +403,45 @@ def doctorSchedule(d_id,c_id,task):
     mydbcursor.execute(query)
     mydb.commit()
 
-def get_doc_schedules(d_id, c_id):
+def get_doc_schedules(d_id, c_id = 0):
     global mydb, mydbcursor
     query = f"select day, start, end from schedules where d_id = {d_id} and c_id = {c_id}"
+    if (c_id == 0):
+        query = f"select schedule_id, c_id, c_name, day, start, end from schedules natural join clinics where d_id = {d_id}"
     mydbcursor.execute(query)
     schedules = mydbcursor.fetchall()
     return schedules
+
+def get_doc_clinics(d_id):
+    global mydb, mydbcursor
+    query = f"select c_id, c_name from schedules natural join clinics where d_id = {d_id}"
+    mydbcursor.execute(query)
+    schedules = mydbcursor.fetchall()
+    return schedules
+
+def remove_schedule(schedule_id):
+    global mydb, mydbcursor
+    query = f"DELETE FROM  schedules WHERE schedule_id = {schedule_id}"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def get_clinic_timings(c_id):
+    global mydb, mydbcursor
+    query = f"select day, start, end from clinics_timings where c_id = {c_id}"
+    mydbcursor.execute(query)
+    timings = list(mydbcursor.fetchall())
+    formated_timing = []
+    for timing in timings:
+        start = (timing[1] + dt.datetime.min).strftime("%H:%M")
+        end = (timing[2] + dt.datetime.min).strftime("%H:%M")
+        formated_timing.append((timing[0],start,end))
+    return formated_timing
+
+def remove_clinic_timing(c_id, day, start, end):
+    global mydb, mydbcursor
+    query = f"DELETE FROM  clinics_timings WHERE c_id = {c_id} AND day ='{day}' AND start = '{start}' AND end = '{end}'"
+    mydbcursor.execute(query)
+    mydb.commit()
 
 def get_c_name(c_id):
     global mydb, mydbcursor
@@ -409,9 +516,9 @@ def get_medical_history(p_id):
     surgical_history = [i[5] for i in history]
     return allergies, diabetes, bp, infections, fam_history, surgical_history
 
-def add_medical_history(p_id, _type, info):
+def add_medical_history(p_id, allergies, diabetes, bp, infectious_diseases, family_history, surgical_history):
     global mydb, mydbcursor
-    query = f"insert into medical_histories(p_id, {_type}) values({p_id},'{info}')"
+    query = f"insert into medical_histories values(NULL,{p_id}, '{allergies}', '{diabetes}', '{bp}', '{infectious_diseases}', '{family_history}', '{surgical_history}')"
     mydbcursor.execute(query)
     mydb.commit()
 
@@ -445,7 +552,11 @@ def get_past_reports(p_id):
     # test_required = [i[2] for i in reports]
     # test_reports = [i[3] for i in reports]
 
-
+def get_appointment_patient(a_id):
+    global mydb, mydbcursor
+    query = f"select p_id, p_name from appointments natural join patients where a_id = {a_id}"
+    mydbcursor.execute(query)
+    return mydbcursor.fetchall()[0]
 
 def get_appointment_doc(a_id):
     global mydb, mydbcursor

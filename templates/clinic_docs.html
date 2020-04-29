@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocHub: {{name}}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Manage Doctors</a>
+            <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+            <button class="invisible btn btn-sm btn-outline-info" type="submit" name="profile_type" value="doctor,{{d_id}}">Profile</button>
+    </nav>
+    <div class="container pt-5">
+		<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+			<th scope="col">Specialization</th>
+			<th scope="col">Salary</th>
+            <th scope="col">Joinin Date</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+			{% for d_id, d_name, specialization, salary, joining_date in doctors %}
+				<tr>
+                    <td>{{d_name}}</td>
+                    <td>{{specialization}}</td>
+                    <td>{{salary}}</td>
+                    <td>{{joining_date}}</td>
+                    <td>
+                        <form method="post" action="remove_clinic_doctor">
+                            <button type="submit" class="btn btn-sm btn-danger" name="c_id_d_id" value="{{c_id}},{{d_id}}">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+
+        <form method="post" action="add_clinic_doctor">
+            <label for="doctor_list"> Add Doctor </label>
+            <select name = 'd_id' id="doctor_list">
+                {% for d_id, d_name in available_doctors %}
+                    <option value="{{d_id}}"> Dr. {{d_name}} </option>
+                {% endfor %}
+            </select>
+            <label for="salary">Set Salary</label>
+            <input type="number" id="salary" name = "salary" placeholder="Enter Salary in ₹ here">
+            <button type="submit" class="btn btn-sm btn-primary" name="c_id" value="{{c_id}}">Add</button>
+        </form>
+
+</body>
+</html>

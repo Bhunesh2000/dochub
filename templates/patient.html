@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dochub - Patient : {{ name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
 </head>
 <body>
-    <nav>
-            <a href="#">
-            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
-            </a>
-            <a href="#">Welcome Mr. {{ name }}!</a>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">Your Profile {{ name }}</a>
             <form method="post" action="book_appointment">
-                <button type="submit" name='p_id' value={{p_id}}>Book an Appointment</button>
-            </form>
-            <form method="post" action="">
-                <button type="submit">See Medical history</button>
-            </form>
-            <form method="post" action="update_profile">
-                <button type="submit" name="profile_type" value="patient">Profile</button>
-            </form>
+              <button type="submit" class="btn btn-sm btn-outline-info mr-2" name='p_id' value={{p_id}}>Book Appointment</button>
+          </form>
+          <form method="post" action="view_medical_history">
+              <button type="submit" class="btn btn-sm btn-outline-info mr-2" name="p_id" value="{{p_id}}">Medical History</button>
+          </form>
+          <form method="post" action="view_profile">
+              <button type="submit" class="btn btn-sm btn-outline-info" name="profile_type" value="patient,{{p_id}}">Profile</button>
+          </form>
     </nav>
-    <table>
+    <div class="container pt-5">
+    <table class="table table-bordered">
         <thead>
           <tr>
             <th scope="col">Doctor</th>
@@ -39,12 +49,9 @@
 				<td>{{c_name}}</td>
         <td>{{description}}</td>
 				<td>
-                    <form method="post" action="">
-                        <button type="submit">Reschedule</button>
-                    </form>
-					<form method="post" action="">
-                        <button type="submit">Cancel</button>
-                    </form>
+					<form method="post" action="patient_cancel_appointment">
+            <button type="submit" class="btn btn-sm btn-danger" name='a_id' value={{a_id}}>Cancel</button>
+          </form>
 				</td>
 				</tr>
 			{% endfor %}
