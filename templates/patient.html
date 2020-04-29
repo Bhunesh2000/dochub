@@ -14,7 +14,7 @@
             <form method="post" action="book_appointment">
                 <button type="submit">Book an Appointment</button>
             </form>
-            <form method="post" action="">
+            <form method="post" action="showmedicalhistory">
                 <button type="submit">See Medical history</button>
             </form>
             <form method="post" action="update_profile">
@@ -39,11 +39,11 @@
 				<td>{{c_name}}</td>
         <td>{{description}}</td>
 				<td>
-                    <form method="post" action="">
-                        <button type="submit">Reschedule</button>
+                    <form method="post" action="reschedule_app">
+                        <button type="submit" name="reschedule" value="patient_{{ a_id }}">Reschedule</button>
                     </form>
-					<form method="post" action="">
-                        <button type="submit">Cancel</button>
+					<form method="post" action="cancel_app">
+                        <button type="submit" name="cancel" value="patient_{{ a_id }}">Cancel</button>
                     </form>
 				</td>
 				</tr>

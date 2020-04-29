@@ -32,17 +32,17 @@
           </tr>
         </thead>
         <tbody>
-			{% for name, datetime, doctor in appointments %}
+			{% for a_id,name, datetime, doctor in appointments %}
 				<tr>
 				<td>{{name}}</td>
 				<td>{{datetime}}</td>
 				<td>{{doctor}}</td>
 				<td>
-                    <form method="post" action="">
-                        <button type="submit">Reschedule</button>
+                    <form method="post" action="reschedule_app">
+                        <button type="submit" name="reschedule" value="clinic_{{ a_id }}">Reschedule</button>
                     </form>
-					<form method="post" action="">
-                        <button type="submit">Cancel</button>
+					<form method="post" action="cancel_app">
+                        <button type="submit" name="cancel" value="clinic_{{ a_id }}">Cancel</button>
                     </form>
 				</td>
 				</tr>

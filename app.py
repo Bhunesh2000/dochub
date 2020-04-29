@@ -49,6 +49,19 @@ def login_signup():
 def book_appointment():
     return render_template("bookappointment.html",diseases=['malaria',"common cold"],clinics=['apollo','mars hospital'],doctors=['dr. vats','dr.ramesh'],timings=['9:00AM - 09:30 AM','04:15PM - 04:45 PM'])
 
+@app.route('/new_app',methods=['POST'])
+def new_app():
+    disease=request.form.get('disease')
+    doctor=request.form.get('doctor')
+    clinic = request.form.get('clinic')
+    timing = request.form.get('timing')
+    # add new appointment
+    return render_template('patient.html')
+
+@app.route('/showmedicalhistory',methods=['POST'])
+def showmedicalhistory():
+    return render_template('showmedicalhistory.html',allergies=['skin'],diabetes=['high'],blood_pressure=[],infections=['common cold'],fmly_his=[],sur_his=['appendix'])
+
 @app.route('/treat_patient',methods=['POST'])
 def treat_patient():
     a_id=request.form.get('treat')
@@ -57,11 +70,49 @@ def treat_patient():
 
 @app.route('/reschedule_app',methods=['POST'])
 def reschedule_app():
+    temp=request.form.get('reschedule')
+    who =temp[:6]
+    if(who=='doctor'):
+        a_id=temp[6:]
+    elif(who=='patien'):
+        a_id = temp[6:]
+        _sel_disease = db  # get from db
+        _sel_doctor = db  # get from db
+        _sel_clinic = db  # get from db
+        _sel_timing = db  # get from db
+        return render_template("rescheduleappointment.html",who=who,a_id=a_id,sel_disease=_sel_disease, sel_doctor=_sel_doctor,sel_clinic=_sel_clinic, sel_timing=_sel_timing, diseases=['malaria', "common cold"],clinics=['apollo', 'mars hospital'], doctors=['dr. vats', 'dr.ramesh'],timings=['9:00AM - 09:30 AM', '04:15PM - 04:45 PM'])
+    elif(who=='clinic'):
+        a_id = temp[7:]
+    else:
+        print('invalid')
+    return
 
+@app.route('/update_app',methods=['POST'])
+def update_app():
+    temp = request.form.get('update')
+    who = temp[:6]
+    if (who == 'doctor'):
+        a_id = temp[6:]
+    elif (who == 'patien'):
+        a_id = temp[6:]
+    elif (who == 'clinic'):
+        a_id = temp[7:]
+    else:
+        print('invalid')
     return
 
 @app.route('/cancel_app',methods=['POST'])
 def cancel_app():
+    temp = request.form.get('reschedule')
+    who = temp[:6]
+    if (who == 'doctor'):
+        a_id = temp[6:]
+    elif (who == 'patien'):
+        a_id = temp[6:]
+    elif (who == 'clinic'):
+        a_id = temp[7:]
+    else:
+        print('invalid')
     return
 
 @app.route('/new_pres',methods=['POST'])
