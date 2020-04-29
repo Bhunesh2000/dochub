@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dochub - QnA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link href="{{ url_for('static', filename='css/style.css') }}" rel = "s<tylesheet"> -->
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+        </a>
+        <a class="navbar-brand mx-auto" href="#">QnA</a>
+        <button class="invisible btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
+        <form method="post" action="ask_question">
+            <button class="btn btn-sm btn-outline-info" type="submit" name="d_id" value="{{d_id}}">Ask Question</button>
+        </form>
+    </nav>
+    
+	<div class="container pt-5">
+        <div id="accordion">
+        {% for q_id, question, answer in qna %}
+            <div class="card mb-4">
+                <div class="card-header">
+                <a class="card-link" data-toggle="collapse" href="{{q_id}}">
+                    {{question}}
+                </a>
+                </div>
+                <div id="{{q_id}}" class="collapse show" data-parent="#accordion">
+                <div class="card-body">
+                    {{answer}}
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</body>

@@ -422,8 +422,6 @@ def add_clinic_doctor():
     available_doctors = db.get_clinic_available_doctor(c_id)
     return render_template("clinic_docs.html", doctors = doctors, c_id = c_id, c_name = c_name, available_doctors = available_doctors)
 
-
-
 @app.route('/fetch_prescriptions', methods=['POST'])
 def fetch_prescriptions():
     _username = request.form.get('username')
@@ -433,6 +431,34 @@ def fetch_prescriptions():
         prescriptions = 0
     return render_template("pharmacy.html",name=pharma_name, pharma_id = pharma_id, prescriptions=prescriptions)
 
+@app.route('/qna', methods=['POST'])
+def qna():
+    qnas = db.get_answered_qs()
+    return render_template("qna.html",qna=qnas)
+
+@app.route('/ask_question', methods=['POST'])
+def ask_question():
+    return render_template("ask_qna.html")
+
+@app.route('/submit_question', methods=['POST'])
+def submit_question():
+    question = request.form.get('question')
+    db.add_question(question)
+    qnas = db.get_answered_qs()
+    return render_template("qna.html",qna=qnas)
+
+@app.route('/answer_question', methods=['POST'])
+def answer_question():
+    questions = db.get_unanswered_qs()
+    return render_template("answer_qna.html", questions = questions)
+
+@app.route('/submit_answer', methods=['POST'])
+def submit_answer():
+    q_id = request.form.get('q_id')
+    answer = request.form.get('answer')
+    db.answer_question(q_id, answer)
+    questions = db.get_unanswered_qs()
+    return render_template("answer_qna.html", questions = questions)
 
 def generate_timings(schedules):
     int_day = {'monday': 0, 'tuesday': 1, 'wednesday': 2, 'thursday': 3, 'friday': 4, 'saturday': 5, 'sunday': 6}

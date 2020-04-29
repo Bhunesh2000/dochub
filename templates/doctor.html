@@ -20,6 +20,9 @@
         <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
         </a>
         <a class="navbar-brand mx-auto" href="#">Welcome Dr. {{ name }}!</a>
+        <form method="post" action="answer_question">
+            <button class="btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Answer QnA</button>
+        </form>
         <form method="post" action="manage_schedule">
             <button class="btn btn-sm btn-outline-info mr-2" type="submit" name="d_id" value="{{d_id}}">Manage Schedule</button>
         </form>

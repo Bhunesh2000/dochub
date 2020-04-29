@@ -570,6 +570,30 @@ def get_appointment_clinic(a_id):
     mydbcursor.execute(query)
     return mydbcursor.fetchall()[0]
 
+def get_answered_qs():
+    global mydb, mydbcursor
+    query = f"select * from qna where answer is not NULL"
+    mydbcursor.execute(query)
+    return list(mydbcursor.fetchall())
+
+def get_unanswered_qs():
+    global mydb, mydbcursor
+    query = f"select q_id, question from qna where answer is NULL"
+    mydbcursor.execute(query)
+    return list(mydbcursor.fetchall())
+
+def add_question(question):
+    global mydb, mydbcursor
+    query = f"insert into qna value(NULL, '{question}', NULL)"
+    mydbcursor.execute(query)
+    mydb.commit()
+
+def answer_question(q_id, answer):
+    global mydb, mydbcursor
+    query = f"update qna set answer='{answer}' where q_id={q_id}"
+    mydbcursor.execute(query)
+    mydb.commit()
+
 if __name__ == "__main__":
     
     mydbcursor.execute('SHOW TABLES')
