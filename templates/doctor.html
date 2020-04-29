@@ -48,13 +48,13 @@
 				<td>{{description}}</td>
 				<td>
                     <form method="post" action="treat_patient">
-                        <button type="submit" name="treat" class="btn btn-sm btn-success" value="doctor_{{ a_id }}">Treat</button>
+                        <button type="submit" name='a_id' value="{{a_id}},{{p_id}},{{p_name}}" class="btn btn-sm btn-success">Treat</button>
                     </form>
-					<form method="post" action="reschedule_app">
-                        <button type="submit" name="reschedule" class="btn btn-sm btn-primary" value="doctor_{{ a_id }}">Reschedule</button>
+					<form method="post" action="reschedule_appointment">
+                        <button type="submit" name='a_id' value="{{a_id}}" class="btn btn-sm btn-primary">Reschedule</button>
                     </form>
-					<form method="post" action="cancel_app">
-                        <button type="submit" name="cancel" class="btn btn-sm btn-danger" value="doctor_{{ a_id }}">Cancel</button>
+					<form method="post" action="doc_cancel_appointment">
+                        <button type="submit" name='a_id' value="{{a_id}}"class="btn btn-sm btn-danger">Cancel</button>
                     </form>
 				</td>
 				</tr>

@@ -11,34 +11,60 @@
                 <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
                 </a>
     </nav>
+
     <div>
-     <form method="post" action="new_app">
-    <label for="disease"> What are you suffering from ? </label>
-    <select id="disease" name="disease">
-        {% for disease in diseases %}
-        <option value="{{ disease }}"> disease </option>
-        {% endfor %}
-    </select>
-    <label for="clinic"> Choose a clinic </label>
-    <select id="clinic" name="clinic">
-        {% for clinic in clinics %}
-        <option value="{{ clinic }}"> {{clinic}} </option>
-        {% endfor %}
-    </select>
-    <label for="doctor"> Select the doctor you want to book appointment with </label>
-    <select id="doctor" name="doctor">
-        {% for doctor in doctors %}
-        <option value="{{ doctor }}"> {{doctor}} </option>
-        {% endfor %}
-    </select>
-    <label for="timing"> Select time convenient to you </label>
-    <select id="timing" name="timing">
-        {% for timing in timings %}
-        <option value="{{ timing }}"> {{ timing }} </option>
-        {% endfor %}
-    </select>
-    <button type="submit" > Book </button>
+    <form method='post' action='select_specialization'>
+        <label for="disease"> What are you suffering from ? </label>
+        <select name = 'specialization' id="disease">
+            {% for speacialization in specializations %}
+                <option value="{{speacialization}}"> {{speacialization}} </option>
+            {% endfor %}
+        </select>
+        <button type="submit" name='p_id' value="{{p_id}}">Next</button>
     </form>
+    <div>
+    <div>
+    {% if specialization %}
+        <form method = 'post' action = 'select_clinic'>
+            <label for="clinic"> Choose a clinic </label>
+            <select id="clinic" name='clinic'>
+                {% for c_id, c_name in clinics %}
+                    <option name = 'clinic' value="{{ c_id }},{{c_name}}"> {{c_name}} </option>
+                {% endfor %}
+            </select>
+            <button type="submit" name = 'specialization' value="{{specialization}},{{p_id}}">Next</button>
+        </form>
+    {% endif %}
+    </div>
+
+    <div>
+    {% if specialization and clinic %}
+        <form method = 'post' action = 'select_doctor'>
+            <label for="doctor"> Select the doctor you want to book appointment with </label>
+            <select id="doctor" name='doctor'>
+                {% for d_id, d_name in doctors %}
+                    <option value="{{ d_id }},{{d_name}}"> {{d_name}} </option>
+                {% endfor %}
+            </select>
+            <button type="submit" name = 'specialization_clinic' value="{{p_id}},{{specialization}},{{clinic}}">Next</button>
+        </form>
+    {% endif %}
+    </div>
+
+    <div>
+    {% if specialization and clinic and doctor%}
+        <form method = 'post' action = 'confirm_booking'>
+            <label for="timing"> Select time convenient to you </label>
+            <select id="timing" name='timing'>
+                {% for timing in timings %}
+                    <option value="{{ timing }}"> {{ timing }} </option>
+                {% endfor %}
+            </select>
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="Enter description here">
+            <button type="submit" name = 'specialization_clinic_doc' value="{{p_id}},{{speacialization}},{{clinic}},{{doctor}}">Book</button>
+        </form>
+    {% endif %}
     </div>
 </body>
 </html>

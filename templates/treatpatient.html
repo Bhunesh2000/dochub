@@ -6,7 +6,7 @@
 </head>
 <body>
     <div>
-        <h3> Past prescriptions </h3>
+        <h3>Past prescriptions </h3>
 		<table>
         <thead>
           <tr>
@@ -22,13 +22,13 @@
 		</tbody>
 		</table>
 	</div>
-    <form method="post" action="new_pres">
-        <label for="new_pres"> Give Prescription </label>
+    <form method="post" action="new_prescription">
+        <label for="new_pres">Give Prescription </label>
         <input type="text" id="new_pres" name="new_pres" placeholder="Enter prescription here">
-        <button type="submit"> Add </button>
+        <button type="submit" name = "a_id" value="{{a_id}},{{p_id}},{{name}}"> Add </button>
     </form>
     <div>
-        <h3> Medical History </h3>
+        <h3>Medical History </h3>
 		<table>
         <thead>
           <tr>
@@ -38,7 +38,7 @@
         </thead>
         <tbody>
             <tr>
-                <td> Allergies </td>
+                <td>Allergies </td>
                 <td>
                     {% for allergy in allergies %}
                         {{ allergy }},
@@ -46,7 +46,7 @@
                 </td>
             </tr>
 			<tr>
-                <td> Diabetes </td>
+                <td>Diabetes </td>
                 <td>
                     {% for diabete in diabetes %}
                         {{ diabete }},
@@ -54,7 +54,7 @@
                 </td>
             </tr>
             <tr>
-                <td> Blood Pressure </td>
+                <td>Blood Pressure </td>
                 <td>
                     {% for blood_pressure in bp %}
                         {{ blood_pressure }},
@@ -62,7 +62,7 @@
                 </td>
             </tr>
             <tr>
-                <td> Infectious Diseases </td>
+                <td>Infectious Diseases </td>
                 <td>
                     {% for infec in infections %}
                         {{ infec }},
@@ -70,17 +70,17 @@
                 </td>
             </tr>
             <tr>
-                <td> Family history </td>
+                <td>Family history </td>
                 <td>
-                    {% for fmly in fmly_his %}
+                    {% for fmly in fam_history %}
                         {{ fmly }},
                     {% endfor %}
                 </td>
             </tr>
             <tr>
-                <td> Surgical history </td>
+                <td>Surgical history </td>
                 <td>
-                    {% for surg in surg_his %}
+                    {% for surg in surgical_history %}
                         {{ surg }},
                     {% endfor %}
                 </td>
@@ -88,20 +88,21 @@
 		</tbody>
 		</table>
 	</div>
-    <form method="post" action="">
-        <h4> Add Medical history <h4>
+    <form method="post" action="add_med_history">
+        <label for="new_med_history"> Add Medical history </label>
+        <input type="text" id="new_med_history" name="new_med_history" placeholder="Enter medical history here">
         <label for="allergies"></label> Allergy
-        <input type="radio" id="allergies" name="type_disease" value="allergies">
+        <input type="radio" id="allergies" name="type_disease" value="allergies,{{a_id}},{{p_id}},{{name}}">
         <label for="diabetes"> Diabetes </label>
-        <input type="radio" id="diabetes" name="type_disease" value="diabetes">
+        <input type="radio" id="diabetes" name="type_disease" value="diabetes,{{a_id}},{{p_id}},{{name}}">
         <label for="bp"> Blood Pressure </label>
-        <input type="radio" id="bp" name="type_disease" value="bp">
+        <input type="radio" id="bp" name="type_disease" value="bp,{{a_id}},{{p_id}},{{name}}">
         <label for="infec"> Infectious disease </label>
-        <input type="radio" id="infec" name="type_disease" value="infec">
+        <input type="radio" id="infec" name="type_disease" value="infectious_diseases,{{a_id}},{{p_id}},{{name}}">
         <label for="fmly_his"> Family history </label>
-        <input type="radio" id="fmly_his" name="type_disease" value="fmly_his">
+        <input type="radio" id="fmly_his" name="type_disease" value="family_history,{{a_id}},{{p_id}},{{name}}">
         <label for="sur_his"> Surgical history </label>
-        <input type="radio" id="sur_his" name="type_disease" value="sur_his">
+        <input type="radio" id="sur_his" name="type_disease" value="surgical_history,{{a_id}},{{p_id}},{{name}}">
         <button type="submit"> Add </button>
     </form>
     <div>
@@ -109,10 +110,10 @@
         <table>
         <thead>
           <tr>
-            <th scope="col"> Symptoms </th>
-			<th scope="col"> Disease </th>
-			<th scope="col">Test required </th>
-            <th scope="col"> Test reports </th>
+            <th scope="col">Symptoms </th>
+			<th scope="col">Disease </th>
+			<th scope="col">Tests Required </th>
+            <th scope="col">Test Reports </th>
           </tr>
         </thead>
         <tbody>
@@ -128,7 +129,7 @@
 		</table>
 	</div>
     <h3> Add New Report </h3>
-    <form method="post" action="">
+    <form method="post" action="add_report">
         <label for="symptoms"> Symptoms </label>
         <input type="text" id="symptoms" name="symptoms" placeholder="What are the symptoms?">
         <label for="disease"> Disease </label>
@@ -137,7 +138,7 @@
         <input type="text" id="test_req" name="test_req" placeholder="What are test required?">
         <label for="test_rep"> Test reports </label>
         <input type="text" id="test_rep" name="test_rep" placeholder="Test report says...">
-        <button type="submit"> Add </button>
+        <button type="submit" name = "a_id" value="{{a_id}},{{p_id}},{{name}}"> Add </button>
     </form>
 </body>
 </body>
