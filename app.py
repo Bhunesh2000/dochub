@@ -337,8 +337,10 @@ def new_doctor():
     specialization = request.form.get('specialization')
     phone = request.form.get('phone')
     fee = request.form.get('fee')
-    username = request.form.get('username')
-    password = request.form.get('password')
+    temp=request.form.get('user_pass')
+    temp2=temp.split('_')
+    username =temp2[0]
+    password =temp2[1]
     d_id = db.new_doctor(name, specialization, fee, phone, username, password)
     return login_doctor(d_id, name)
 
@@ -349,8 +351,10 @@ def new_patient():
     sex = request.form.get('sex')
     age = request.form.get('age')
     phone = request.form.get('phone')
-    username = request.form.get('username')
-    password = request.form.get('password')
+    temp = request.form.get('user_pass')
+    temp2 = temp.split('_')
+    username = temp2[0]
+    password = temp2[1]
     p_id = db.new_patient(name, sex, age, phone, username, password)
     return login_patient(p_id, name)
 
@@ -362,13 +366,25 @@ def new_clinic():
     closingtime = request.form.get('closingtime')
     address = request.form.get('address')
     phone = request.form.get('phone')
-    username = request.form.get('username')
-    password = request.form.get('password')
+    temp = request.form.get('user_pass')
+    temp2 = temp.split('_')
+    username = temp2[0]
+    password = temp2[1]
     c_id = db.new_clinic(name, address, phone, username, password)
     for day in days:
         db.add_clinic_timing(c_id, day, openingtime, closingtime)
     return login_clinic(c_id, name)
 
+@app.route('/new_pharmacy', methods=['POST'])
+def new_pharmacy():
+    name = request.form.get('pharma_name')
+    phone = request.form.get('phone')
+    temp = request.form.get('user_pass')
+    temp2 = temp.split('_')
+    username = temp2[0]
+    password = temp2[1]
+    ph_id=db.new_pharmacy(name,phone,username,password)
+    return login_pharmacy(ph_id,name)
 # @app.route('/treat_patient', methods=['POST'])
 # def treat_patient():
 #     a_id = request.form.get('a_id')

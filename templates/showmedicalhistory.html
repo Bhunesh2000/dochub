@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dochub -  Medical History</title>
+</head>
+<body>
+    <nav>
+            <a href="#">
+            <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+            </a>
+    </nav>
+    <div>
+        <h3> Medical History </h3>
+		<table>
+        <thead>
+          <tr>
+            <th scope="col">Type of Disease</th>
+            <th scope="col">Disease</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td> Allergies </td>
+                <td>
+                    {% for allergy in allergies %}
+                        {{ allergy }},
+                    {% endfor %}
+                </td>
+            </tr>
+			<tr>
+                <td> Diabetes </td>
+                <td>
+                    {% for diabete in diabetes %}
+                        {{ diabete }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Blood Pressure </td>
+                <td>
+                    {% for blood_pressure in bp %}
+                        {{ blood_pressure }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Infectious Diseases </td>
+                <td>
+                    {% for infec in infections %}
+                        {{ infec }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Family history </td>
+                <td>
+                    {% for fmly in fmly_his %}
+                        {{ fmly }},
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td> Surgical history </td>
+                <td>
+                    {% for surg in surg_his %}
+                        {{ surg }},
+                    {% endfor %}
+                </td>
+            </tr>
+		</tbody>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dochub - Reschedule Appointment </title>
+</head>
+<body>
+    <nav>
+                <a href="#">
+                <img src="{{ url_for('static', filename='docchub2.png') }}" alt="Logo" style="width:10vw;">
+                </a>
+    </nav>
+    {% if who=='patient' %}
+    <div>
+    <form method="post" action="update_app">
+    <label for="disease"> What are you suffering from ? </label>
+    <select id="disease" name="disease">
+        {% for disease in diseases %}
+        <option value="{{ disease }}" {% if disease==sel_disease %} selected {% endif %}> disease </option>
+        {% endfor %}
+    </select>
+    <label for="clinic"> Choose a clinic </label>
+    <select id="clinic" name="clinic">
+        {% for clinic in clinics %}
+        <option value="{{ clinic }}" {% if clinic==sel_clinic %} selected {% endif %}> {{clinic}} </option>
+        {% endfor %}
+    </select>
+    <label for="doctor"> Select the doctor you want to book appointment with </label>
+    <select id="doctor" name="doctor">
+        {% for doctor in doctors %}
+        <option value="{{ doctor }}" {% if doctor==sel_doctor %} selected {% endif %}> {{doctor}} </option>
+        {% endfor %}
+    </select>
+    <label for="timing"> Select time convenient to you </label>
+    <select id="timing" name="timing">
+        {% for timing in timings %}
+        <option value="{{ timing }}" {% if timing==sel_timing %} selected {% endif %}> {{ timing }} </option>
+        {% endfor %}
+    </select>
+    <button type="submit" name="update" value="patient_{{ a_id }}"> Update </button>
+    </form>
+    </div>
+    {% endif %}
+{#    {% if who=='doctor' %}#}
+{#    <div>#}
+{#    <label for="disease"> What are you suffering from ? </label>#}
+{#    <select id="disease">#}
+{#        {% for disease in diseases %}#}
+{#        <option value="{{ disease }}" {% if disease== %}> disease </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="clinic"> Choose a clinic </label>#}
+{#    <select id="clinic">#}
+{#        {% for clinic in clinics %}#}
+{#        <option value="{{ clinic }}"> {{clinic}} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="doctor"> Select the doctor you want to book appointment with </label>#}
+{#    <select id="doctor">#}
+{#        {% for doctor in doctors %}#}
+{#        <option value="{{ doctor }}"> {{doctor}} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="timing"> Select time convenient to you </label>#}
+{#    <select id="timing">#}
+{#        {% for timing in timings %}#}
+{#        <option value="{{ timing }}"> {{ timing }} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    </div>#}
+{#    {% endif %}#}
+{#    {% if who=='patient' %}#}
+{#    <div>#}
+{#    <label for="disease"> What are you suffering from ? </label>#}
+{#    <select id="disease">#}
+{#        {% for disease in diseases %}#}
+{#        <option value="{{ disease }}" {% if disease== %}> disease </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="clinic"> Choose a clinic </label>#}
+{#    <select id="clinic">#}
+{#        {% for clinic in clinics %}#}
+{#        <option value="{{ clinic }}"> {{clinic}} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="doctor"> Select the doctor you want to book appointment with </label>#}
+{#    <select id="doctor">#}
+{#        {% for doctor in doctors %}#}
+{#        <option value="{{ doctor }}"> {{doctor}} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    <label for="timing"> Select time convenient to you </label>#}
+{#    <select id="timing">#}
+{#        {% for timing in timings %}#}
+{#        <option value="{{ timing }}"> {{ timing }} </option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#    </div>#}
+{#    {% endif %}#}
+</body>
+</html>

@@ -5,7 +5,7 @@ import datetime as dt
 mydb = mysql.connector.connect(
     host = "localhost",
     user = "root",
-    passwd = "apple212",
+    passwd = "dbms56",
     database = "testdata"
     )
 mydbcursor = mydb.cursor()
