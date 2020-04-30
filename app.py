@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, url_for
-import login as db
+import queries as db
 import datetime as dt
 
 app = Flask(__name__)
@@ -338,7 +338,7 @@ def new_doctor():
     phone = request.form.get('phone')
     fee = request.form.get('fee')
     temp=request.form.get('user_pass')
-    temp2=temp.split('_')
+    temp2=temp.split(',')
     username =temp2[0]
     password =temp2[1]
     d_id = db.new_doctor(name, specialization, fee, phone, username, password)
@@ -352,7 +352,7 @@ def new_patient():
     age = request.form.get('age')
     phone = request.form.get('phone')
     temp = request.form.get('user_pass')
-    temp2 = temp.split('_')
+    temp2 = temp.split(',')
     username = temp2[0]
     password = temp2[1]
     p_id = db.new_patient(name, sex, age, phone, username, password)
@@ -367,7 +367,7 @@ def new_clinic():
     address = request.form.get('address')
     phone = request.form.get('phone')
     temp = request.form.get('user_pass')
-    temp2 = temp.split('_')
+    temp2 = temp.split(',')
     username = temp2[0]
     password = temp2[1]
     c_id = db.new_clinic(name, address, phone, username, password)
@@ -380,7 +380,7 @@ def new_pharmacy():
     name = request.form.get('pharma_name')
     phone = request.form.get('phone')
     temp = request.form.get('user_pass')
-    temp2 = temp.split('_')
+    temp2 = temp.split(',')
     username = temp2[0]
     password = temp2[1]
     ph_id=db.new_pharmacy(name,phone,username,password)
